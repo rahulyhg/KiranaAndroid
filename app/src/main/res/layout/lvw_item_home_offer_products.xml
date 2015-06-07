@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cvwHomeOfferProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:id="@+id/rlHomeOfferProducts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/imgHomeOfferProducts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/txtHomeOfferProductsName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgHomeOfferProducts"
+                android:text="Vada"
+                android:textColor="#000000"
+                android:textSize="18dp"/>
+
+            <TextView
+                android:id="@+id/txtHomeOfferProductsPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtHomeOfferProductsName"
+                android:text="Rs. 15"
+                android:textColor="#000000"
+                android:textSize="18dp"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
