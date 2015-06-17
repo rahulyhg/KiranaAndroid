@@ -20,8 +20,8 @@ public class HttpManager {
             BufferedReader reader;
             try {
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-                connection.setRequestMethod("POST");
-                //connection.setRequestMethod("GET");
+                //connection.setRequestMethod("POST");
+                connection.setRequestMethod("GET");
                 //connection.setRequestMethod("DELETE");
 
                 int responseCode = connection.getResponseCode();

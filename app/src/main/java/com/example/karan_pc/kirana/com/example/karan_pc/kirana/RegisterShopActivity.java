@@ -25,20 +25,17 @@ import java.net.URL;
 /**
  * Created by Karan-PC on 17-05-2015.
  */
-public class SignupFragment extends Fragment {
+public class RegisterShopActivity extends Fragment {
 
-    Button btnLogin;
+    Button btnRegisterShop;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_signup, container, false);
-        btnLogin = (Button)rootView.findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnRegisterShop = (Button)rootView.findViewById(R.id.btnLogin);
+        btnRegisterShop.setOnClickListener(v -> {
 
-                BackgroundTask task = new BackgroundTask();
-                task.execute("Haha");
-            }
+            BackgroundTask task = new BackgroundTask();
+            task.execute("Haha");
         });
 
         return rootView;
@@ -56,18 +53,16 @@ public class SignupFragment extends Fragment {
             JSONObject obj = new JSONObject();
             try {
                 obj.put("id",0);
-                obj.put("userName", "aaavo");
-                obj.put("password", "pwdpwd");
-                obj.put("userToken", null);
-                obj.put("userRole", null);
-                obj.put("email", "qwerty@asd.com");
-                obj.put("phone", "3355");
-                obj.put("street", "Baker St.");
-                obj.put("state", "KL");
-                obj.put("shop",null);
+                obj.put("name", "aaavo");
+                obj.put("type", "pwdpwd");
+                obj.put("address", "yaya");
+                obj.put("tin", "1234567890");
+                obj.put("serviceTax", 2.5);
+                obj.put("serviceCharge", 23.75);
+                obj.put("vat", 12.75);
 
                 String objString = obj.toString();
-                String strUrl = "http://52.0.139.50:8080/KiranaService/v1/user/register";
+                String strUrl = "http://52.0.139.50:8080/KiranaService/v1/shop/register";
                 URL url = new URL(strUrl);
                 HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
                 urlConnection.setRequestMethod("POST");

@@ -69,6 +69,11 @@
         <activity
             android:name=".com.example.karan_pc.kirana.ChangeRoleActivity"
             android:label="File Explorer" >
+        </activity>
+
+        <activity
+            android:name=".com.example.karan_pc.kirana.WriteCSVToDBActivity"
+            android:label="File Explorer" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

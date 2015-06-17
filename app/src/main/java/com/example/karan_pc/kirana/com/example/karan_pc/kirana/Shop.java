@@ -5,6 +5,8 @@ package com.example.karan_pc.kirana.com.example.karan_pc.kirana;
  */
 public class Shop {
 
+    //added
+    private int majorCode;
     private int id;
     private String name;
     private String type;
@@ -14,6 +16,14 @@ public class Shop {
     private double serviceCharge;
     private double vat;
     private String website;
+
+    public int getMajorCode() {
+        return majorCode;
+    }
+
+    public void setMajorCode(int majorCode) {
+        this.majorCode = majorCode;
+    }
 
     public int getId() {
         return id;
