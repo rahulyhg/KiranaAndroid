@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_full_bg_color">
+
+    <ScrollView
+        android:id="@+id/svLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fillViewport="true"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:id="@+id/llUploadProductList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rectangle_bg_shape"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/txtUploadProductList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload Product list as CSV file from device"
+                android:gravity="center"
+                android:layout_marginBottom="30dp"/>
+
+            <Button
+                android:id="@+id/btnBrowseCSV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Browse Product list file"/>
+
+            <Button
+                android:id="@+id/btnUploadLater"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload later"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

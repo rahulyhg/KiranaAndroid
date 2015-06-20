@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_full_bg_color">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/llLoginParentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/rectangle_bg_shape">
+
+                <TextView
+                    android:id="@+id/txtShopName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Shop Name"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="20dp"
+                    android:textStyle="bold"/>
+
+                <RelativeLayout
+                    android:id="@+id/rlShopType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/spnShopType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hotel"
+                    android:layout_marginBottom="10dp"
+                    android:layout_alignParentRight="true"
+                    android:textSize="18dp"
+                    android:textStyle="bold"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/txtAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Address"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="16dp"/>
+
+                <TextView
+                    android:id="@+id/txtMobileNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mobile Number"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="16dp"/>
+
+                <TextView
+                    android:id="@+id/txtWebsite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Website"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="16dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llTaxRelated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/rectangle_bg_shape"
+                    android:paddingTop="30dp"
+                    android:paddingBottom="30dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:id="@+id/llTinNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/txtTinNumberLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tin Number"
+                    android:textSize="16dp"
+                    android:layout_weight="0.5"/>
+
+                <TextView
+                    android:id="@+id/txtTinNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tin Number"
+                    android:textSize="16dp"
+                    android:layout_weight="0.5"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llTax"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/txtServiceTaxLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service Tax"
+                        android:layout_weight="0.5"
+                        android:textSize="16dp"/>
+
+                    <TextView
+                        android:id="@+id/txtServicetax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service Tax"
+                        android:layout_weight="0.5"
+                        android:textSize="16dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llServiceCharge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/txtServiceChargeLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service Charge"
+                        android:layout_weight="0.5"
+                        android:textSize="16dp"/>
+
+                    <TextView
+                        android:id="@+id/txtServiceCharge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service Charge"
+                        android:layout_weight="0.5"
+                        android:textSize="16dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llButtonsShop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+            <Button
+                android:id="@+id/btnEditShop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Shop"
+                android:layout_weight="0.5"/>
+
+            <Button
+                android:id="@+id/btnDeleteShop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete Shop"
+                android:layout_weight="0.5"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnListProducts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="List Products" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
