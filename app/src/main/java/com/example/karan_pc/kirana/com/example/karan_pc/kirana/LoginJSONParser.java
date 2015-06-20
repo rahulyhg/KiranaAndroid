@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,49 +13,86 @@ import java.util.List;
 public class LoginJSONParser {
     public static User getLoginData(String serviceData) {
 
-        try {
-            JSONObject object = new JSONObject(serviceData);
-            JSONObject parentObject = new JSONObject();
-            parentObject = object.getJSONObject("object");
             User user = new User();
-            user.setMajorCode(object.getInt("majorCode"));
-            user.setId(parentObject.getInt("id"));
-            user.setUserName(parentObject.getString("userName"));
-            user.setUserToken(parentObject.getString("userToken"));
-            user.setUserRole(parentObject.getString("userRole"));
-            user.setEmail(parentObject.getString("email"));
-            user.setPhone(parentObject.getString("phone"));
-            user.setStreet(parentObject.getString("street"));
-            user.setState(parentObject.getString("state"));
-
-            JSONObject shopObj = null;
-            if (!parentObject.isNull("shop")) {
-                shopObj = parentObject.getJSONObject("shop");
+            JSONObject object = null;
+            try {
+                object = new JSONObject(serviceData);
+                user.setMajorCode(object.getInt("majorCode"));
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            JSONObject innerObject = null;
-            if(shopObj != null)
-                innerObject = new JSONObject(shopObj.toString());
-            if(innerObject != null) {
-                Shop shop = new Shop();
-                shop.setId(innerObject.getInt("id"));
-                shop.setName(innerObject.getString("name"));
-                shop.setType(innerObject.getString("type"));
-                shop.setAddress(innerObject.getString("address"));
-                shop.setTin(innerObject.getString("tin"));
-                shop.setServiceTax(innerObject.getDouble("serviceTax"));
-                shop.setServiceCharge(innerObject.getDouble("serviceCharge"));
-                shop.setVat(innerObject.getDouble("vat"));
-                shop.setWebsite(innerObject.getString("website"));
-
-                user.setShop(shop);
+            JSONArray parentArray = new JSONArray();
+            List<UserList.OneUser> userList = new ArrayList<UserList.OneUser>();
+            try {
+                parentArray = object.getJSONArray("data");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            else
-                user.setShop(null);
+                JSONObject users = new JSONObject();
+                try {
+                    users = parentArray.getJSONObject(0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    user.setId(users.getInt("id"));
+                    user.setUserName(users.getString("userName"));
+                    user.setUserToken(users.getString("userToken"));
+                    user.setUserRole(users.getString("userRole"));
+                    user.setEmail(users.getString("email"));
+                    user.setPhone(users.getString("phone"));
+                    user.setStreet(users.getString("street"));
+                    user.setState(users.getString("state"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                JSONObject shopObj = null;
+        //array of shops if requirement changes
+                /*try {
+                    JSONArray shopArray = new JSONArray();
+                    shopArray = object.getJSONArray("shop");
+                    for(int i = 0;i< shopArray.length();i++) {
+                        JSONObject shops = new JSONObject();
+                        shops = parentArray.getJSONObject(i);
+                    }
+                }catch (Exception e) {
 
-            return user;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+                }*/
+
+        //end
+                if (!users.isNull("shop")) {
+                    try {
+                        shopObj = users.getJSONObject("shop");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                JSONObject innerObject = null;
+                if (shopObj != null)
+                    try {
+                        innerObject = new JSONObject(shopObj.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                if (innerObject != null) {
+                    Shop shop = new Shop();
+                    try {
+                        shop.setId(innerObject.getInt("id"));
+                        shop.setName(innerObject.getString("name"));
+                        shop.setType(innerObject.getString("type"));
+                        shop.setAddress(innerObject.getString("address"));
+                        shop.setTin(innerObject.getString("tin"));
+                        shop.setServiceTax(innerObject.getDouble("serviceTax"));
+                        shop.setServiceCharge(innerObject.getDouble("serviceCharge"));
+                        shop.setVat(innerObject.getDouble("vat"));
+                        shop.setWebsite(innerObject.getString("website"));
+                    } catch (Exception e) {
+
+                    }
+                    user.setShop(shop);
+                }
+
+        //}
+        return user;
     }
 }

@@ -36,14 +36,11 @@ public class LoginFragment extends Fragment {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            /*strUsername = edtUsername.getText().toString();
-            strPassword = edtPassword.getText().toString();
+            strUsername = edtUsername.getText().toString().trim();
+            strPassword = edtPassword.getText().toString().trim();
             final String loginUrl = "http://52.0.139.50:8080/KiranaService/v1/user/login?email=" + strUsername + "&password=" + strPassword;
             BackgroundTask task = new BackgroundTask();
-            task.execute(loginUrl);*/
-
-            homeIntent = new Intent(getActivity(), HomeActivity.class);
-            startActivity(homeIntent);
+            task.execute(loginUrl);
             }
         });
         return rootView;
@@ -62,7 +59,7 @@ public class LoginFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            publishProgress("Yo started");
+            publishProgress("Called the login web service");
         }
 
         @Override

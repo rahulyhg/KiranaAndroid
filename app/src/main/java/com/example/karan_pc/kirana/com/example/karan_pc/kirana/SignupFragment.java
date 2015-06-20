@@ -1,6 +1,5 @@
 package com.example.karan_pc.kirana.com.example.karan_pc.kirana;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.karan_pc.kirana.R;
 
@@ -28,16 +28,40 @@ import java.net.URL;
 public class SignupFragment extends Fragment {
 
     Button btnLogin;
+    EditText edtUserName, edtLastName, edtEmailId, edtPassWord, edtPassWordAgain, edtMobileNumber, edtStreet, edtState;
+    String strUsername,strLastName, strEmailID, strPassWord, strPassWordAgain, strMobileNumber, strStreet, strState;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_signup, container, false);
         btnLogin = (Button)rootView.findViewById(R.id.btnLogin);
+        edtUserName = (EditText)rootView.findViewById(R.id.edtUserName);
+        edtLastName = (EditText)rootView.findViewById(R.id.edtLastName);
+        edtEmailId = (EditText)rootView.findViewById(R.id.edtEmailId);
+        edtPassWord = (EditText)rootView.findViewById(R.id.edtPassWord);
+        edtPassWordAgain = (EditText)rootView.findViewById(R.id.edtPassWordAgain);
+        edtMobileNumber = (EditText)rootView.findViewById(R.id.edtMobileNumber);
+        edtStreet = (EditText)rootView.findViewById(R.id.edtStreet);
+        edtState = (EditText)rootView.findViewById(R.id.edtState);
+
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                strUsername = edtUserName.getText().toString().trim();
+                strLastName = edtLastName.getText().toString().trim();
+                strEmailID = edtEmailId.getText().toString().trim();
+                strPassWord = edtPassWord.getText().toString().trim();
+                strPassWordAgain = edtPassWordAgain.getText().toString().trim();
+                strMobileNumber = edtMobileNumber.getText().toString().trim();
+                strStreet = edtStreet.getText().toString().trim();
+                strState = edtState.getText().toString().trim();
+
+                String strFullName = strUsername + " " + strLastName;
+
+                String[] registerData = {strFullName, strPassWord, strEmailID, strMobileNumber, strStreet, strState};
                 BackgroundTask task = new BackgroundTask();
-                task.execute("Haha");
+                task.execute(registerData);
             }
         });
 
@@ -48,7 +72,7 @@ public class SignupFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            publishProgress("Yo started");
+            publishProgress("Called the register web service");
         }
 
         @Override
@@ -56,14 +80,14 @@ public class SignupFragment extends Fragment {
             JSONObject obj = new JSONObject();
             try {
                 obj.put("id",0);
-                obj.put("userName", "aaavo");
-                obj.put("password", "pwdpwd");
+                obj.put("userName", params[0]);
+                obj.put("password", params[1]);
                 obj.put("userToken", null);
                 obj.put("userRole", null);
-                obj.put("email", "qwerty@asd.com");
-                obj.put("phone", "3355");
-                obj.put("street", "Baker St.");
-                obj.put("state", "KL");
+                obj.put("email", params[2]);
+                obj.put("phone", params[3]);
+                obj.put("street", params[4]);
+                obj.put("state", params[5]);
                 obj.put("shop",null);
 
                 String objString = obj.toString();
@@ -98,7 +122,7 @@ public class SignupFragment extends Fragment {
 
             }
             System.out.print(obj);
-            return "Yo";
+            return "Success";
         }
 
         @Override
