@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.karan_pc.kirana.LoginActivity;
 import com.example.karan_pc.kirana.R;
 
 /**
@@ -74,7 +75,16 @@ public class LoginFragment extends Fragment {
         protected void onPostExecute(User user) {
             if(user != null) {
                 if(user.getMajorCode() == 200) {
+                    /*homeIntent = new Intent(getActivity(), HomeActivity.class);
+                    homeIntent.putExtra("loggedInUser", user);
+                    startActivity(homeIntent);*/
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("loggedInUser", user);
+                    //set Fragmentclass Arguments
+                    //ShopListFragment fragobj = new ShopListFragment();
+                    //fragobj.setArguments(bundle);
                     homeIntent = new Intent(getActivity(), HomeActivity.class);
+                    homeIntent.putExtras(bundle);
                     startActivity(homeIntent);
                 }
             }

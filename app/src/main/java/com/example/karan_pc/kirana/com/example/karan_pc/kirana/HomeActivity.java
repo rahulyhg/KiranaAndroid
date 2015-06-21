@@ -204,7 +204,8 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
         //fragment = new DummyFragment();
         switch (position) {
             case 0:
-                fragment = new DummyFragment();
+                //fragment = new DummyFragment();
+                fragment = new ShopListFragment();
                 break;
             case 1:
                 fragment = new YoFragment();

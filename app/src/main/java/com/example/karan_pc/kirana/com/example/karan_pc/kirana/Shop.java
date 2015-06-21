@@ -1,9 +1,11 @@
 package com.example.karan_pc.kirana.com.example.karan_pc.kirana;
 
+import java.io.Serializable;
+
 /**
  * Created by Karan-PC on 31-05-2015.
  */
-public class Shop {
+public class Shop implements Serializable{
 
     //added
     private int majorCode;

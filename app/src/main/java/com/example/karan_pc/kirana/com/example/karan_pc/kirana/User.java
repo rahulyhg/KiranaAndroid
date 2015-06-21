@@ -1,9 +1,11 @@
 package com.example.karan_pc.kirana.com.example.karan_pc.kirana;
 
+import java.io.Serializable;
+
 /**
  * Created by Karan-PC on 30-05-2015.
  */
-public class User {
+public class User implements Serializable{
     private int majorCode;
     private int id;
     private String userName;
