@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class ShopListFragment extends Fragment {
     ListView lvwShops;
-
+    ShopListAdapter shopListAdapter;
     public ShopListFragment() {}
 
     @Override
@@ -34,13 +34,18 @@ public class ShopListFragment extends Fragment {
         Bundle bundle = intent.getExtras();
         User user = (User)intent.getSerializableExtra("loggedInUser");
         Shop shop = user.getShop();
-        List<Shop> shopList = new ArrayList<Shop>();
+        final List<Shop> shopList = new ArrayList<Shop>();
         shopList.add(0,shop);
         lvwShops = (ListView)rootView.findViewById(R.id.lvwShops);
+        shopListAdapter = new ShopListAdapter(getActivity(), shopList, new IDeleteShop(){
 
-        if(shop != null) {
-            lvwShops.setAdapter(new ShopListAdapter(getActivity(), shopList));
-        }
+            @Override
+            public void refreshListView(int position) {
+                shopList.remove(position);
+                shopListAdapter.notifyDataSetChanged();
+            }
+        });
+        lvwShops.setAdapter(shopListAdapter);
 
         return rootView;
     }

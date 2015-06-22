@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.karan_pc.kirana.R;
 import com.example.karan_pc.kirana.com.example.karan_pc.kirana.HttpManager;
 import com.example.karan_pc.kirana.com.example.karan_pc.kirana.HttpManagerDelete;
+import com.example.karan_pc.kirana.com.example.karan_pc.kirana.IDeleteShop;
 import com.example.karan_pc.kirana.com.example.karan_pc.kirana.Product;
 import com.example.karan_pc.kirana.com.example.karan_pc.kirana.RegisterShopFragment;
 import com.example.karan_pc.kirana.com.example.karan_pc.kirana.Shop;
@@ -34,9 +35,11 @@ public class ShopListAdapter extends BaseAdapter {
 
     List<Shop> shop;
     Context context;
-    public ShopListAdapter(Context context, List<Shop> shop) {
+    IDeleteShop deleteShop;
+    public ShopListAdapter(Context context, List<Shop> shop, IDeleteShop deleteShop) {
         this.context = context;
         this.shop = shop;
+        this.deleteShop = deleteShop;
     }
 
     @Override
@@ -55,7 +58,7 @@ public class ShopListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
@@ -95,9 +98,9 @@ public class ShopListAdapter extends BaseAdapter {
                         } else if (item.getItemId() == R.id.popEditShop) {
 
                         } else if( item.getItemId() == R.id.popDeleteShop) {
-                            final String loginUrl = "http://52.0.139.50:8080/KiranaService/v1/shop/delete/26?userToken=bc09e7ef-51db-44f1-9bb2-ae789798f656";
+                            final String loginUrl = "http://52.0.139.50:8080/KiranaService/v1/shop/delete/17?userToken=abe3a6da-ddfd-4f15-ae93-aac90b8fff7a";
                             BackgroundTask task = new BackgroundTask();
-                            task.execute(loginUrl);
+                            task.execute(loginUrl,position + "");
                         }
                         return true;
                     }
@@ -130,12 +133,13 @@ public class ShopListAdapter extends BaseAdapter {
         @Override
         protected String doInBackground(String... params) {
             String response = HttpManagerDelete.GetServiceData(params[0]);
-            return null;
+            return params[1];
         }
 
         @Override
-        protected void onPostExecute(String user) {
-
+        protected void onPostExecute(String pos) {
+            int position = Integer.parseInt(pos);
+            deleteShop.refreshListView(position);
         }
     }
 }
