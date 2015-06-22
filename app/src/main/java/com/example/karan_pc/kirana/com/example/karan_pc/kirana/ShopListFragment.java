@@ -14,6 +14,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.karan_pc.kirana.R;
+import com.example.karan_pc.kirana.com.example.karan_pc.kirana.adapters.ShopListAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Karan-PC on 21-06-2015.
@@ -29,7 +33,15 @@ public class ShopListFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         Bundle bundle = intent.getExtras();
         User user = (User)intent.getSerializableExtra("loggedInUser");
+        Shop shop = user.getShop();
+        List<Shop> shopList = new ArrayList<Shop>();
+        shopList.add(0,shop);
         lvwShops = (ListView)rootView.findViewById(R.id.lvwShops);
+
+        if(shop != null) {
+            lvwShops.setAdapter(new ShopListAdapter(getActivity(), shopList));
+        }
+
         return rootView;
     }
 }

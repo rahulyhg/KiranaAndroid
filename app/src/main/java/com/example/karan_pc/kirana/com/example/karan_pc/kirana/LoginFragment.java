@@ -26,6 +26,7 @@ public class LoginFragment extends Fragment {
     Intent homeIntent;
     String strUsername;
     String strPassword;
+    TokenIdStorage storage;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +34,8 @@ public class LoginFragment extends Fragment {
         btnLogin = (Button)rootView.findViewById(R.id.btnLogin);
         edtUsername = (EditText)rootView.findViewById(R.id.edtUserName);
         edtPassword = (EditText)rootView.findViewById(R.id.edtPassWord);
+
+        storage = (TokenIdStorage) getActivity().getApplicationContext();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,14 +78,10 @@ public class LoginFragment extends Fragment {
         protected void onPostExecute(User user) {
             if(user != null) {
                 if(user.getMajorCode() == 200) {
-                    /*homeIntent = new Intent(getActivity(), HomeActivity.class);
-                    homeIntent.putExtra("loggedInUser", user);
-                    startActivity(homeIntent);*/
+                    storage.setId(user.getId());
+                    storage.setUserToken(user.getUserToken());
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("loggedInUser", user);
-                    //set Fragmentclass Arguments
-                    //ShopListFragment fragobj = new ShopListFragment();
-                    //fragobj.setArguments(bundle);
                     homeIntent = new Intent(getActivity(), HomeActivity.class);
                     homeIntent.putExtras(bundle);
                     startActivity(homeIntent);

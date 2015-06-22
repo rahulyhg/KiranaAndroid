@@ -118,7 +118,18 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
 
         if (savedInstanceState == null) {
             // on first time display view for first nav item
-            displayView(0);
+            Intent intent = getIntent();
+            Bundle bundle = intent.getExtras();
+            User user = (User)intent.getSerializableExtra("loggedInUser");
+            Shop shop = user.getShop();
+            if(shop == null) {
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.homeDrawerFrame, new RegisterShopFragment())
+                        .commit();
+            } else {
+                displayView(0);
+            }
         }
     }
 
@@ -201,11 +212,14 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
     private void displayView(int position) {
         // update the main content by replacing fragments
         Fragment fragment = null;
-        //fragment = new DummyFragment();
         switch (position) {
             case 0:
                 //fragment = new DummyFragment();
-                fragment = new ShopListFragment();
+                //fragment = new ShopListFragment();
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.homeDrawerFrame, new ShopListFragment())
+                        .commit();
                 break;
             case 1:
                 fragment = new YoFragment();

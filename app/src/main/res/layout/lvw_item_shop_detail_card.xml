@@ -36,7 +36,8 @@
                         android:layout_marginBottom="10dp"
                         android:textSize="20dp"
                         android:textStyle="bold"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:textColor="#000000"/>
 
                     <ImageButton
                         android:id="@+id/ibtPopupShopDetails"
@@ -55,14 +56,15 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/spnShopType"
+                        android:id="@+id/txtShopType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Hotel"
                         android:layout_marginBottom="10dp"
                         android:layout_centerHorizontal="true"
                         android:textSize="18dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:textColor="#000000"/>
 
                 </RelativeLayout>
 
@@ -72,7 +74,8 @@
                     android:layout_height="wrap_content"
                     android:text="Address"
                     android:layout_marginBottom="10dp"
-                    android:textSize="16dp"/>
+                    android:textSize="16dp"
+                    android:textColor="#000000"/>
 
                 <TextView
                     android:id="@+id/txtMobileNumber"
@@ -80,7 +83,8 @@
                     android:layout_height="wrap_content"
                     android:text="Mobile Number"
                     android:layout_marginBottom="10dp"
-                    android:textSize="16dp"/>
+                    android:textSize="16dp"
+                    android:textColor="#000000"/>
 
                 <TextView
                     android:id="@+id/txtWebsite"
@@ -88,7 +92,15 @@
                     android:layout_height="wrap_content"
                     android:text="Website"
                     android:layout_marginBottom="10dp"
-                    android:textSize="16dp"/>
+                    android:textSize="16dp"
+                    android:textColor="#000000"/>
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginBottom="10dp"/>
 
                 <LinearLayout
                     android:id="@+id/llTinNumber"
@@ -100,19 +112,29 @@
 
                     <TextView
                         android:id="@+id/txtTinNumberLabel"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="Tin Number"
                         android:textSize="16dp"
-                        android:layout_weight="0.5"/>
+                        android:layout_weight="0.5"
+                        android:textColor="#000000"/>
+
+                    <RelativeLayout
+                        android:id="@+id/rlTinNumber"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5">
 
                     <TextView
                         android:id="@+id/txtTinNumber"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Tin Number"
                         android:textSize="16dp"
-                        android:layout_weight="0.5"/>
+                        android:layout_alignParentRight="true"
+                        android:textColor="#000000"/>
+
+                    </RelativeLayout>
 
                 </LinearLayout>
 
@@ -126,19 +148,29 @@
 
                     <TextView
                         android:id="@+id/txtServiceTaxLabel"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="Service Tax"
                         android:layout_weight="0.5"
-                        android:textSize="16dp"/>
+                        android:textSize="16dp"
+                        android:textColor="#000000"/>
+
+                    <RelativeLayout
+                        android:id="@+id/rlServiceTax"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5">
 
                     <TextView
                         android:id="@+id/txtServicetax"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Service Tax"
-                        android:layout_weight="0.5"
-                        android:textSize="16dp"/>
+                        android:textSize="16dp"
+                        android:layout_alignParentRight="true"
+                        android:textColor="#000000"/>
+
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -151,19 +183,29 @@
 
                     <TextView
                         android:id="@+id/txtServiceChargeLabel"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="Service Charge"
                         android:layout_weight="0.5"
-                        android:textSize="16dp"/>
+                        android:textSize="16dp"
+                        android:textColor="#000000"/>
+
+                    <RelativeLayout
+                        android:id="@+id/rlServiceCharge"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5">
 
                     <TextView
                         android:id="@+id/txtServiceCharge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Service Charge"
-                        android:layout_weight="0.5"
-                        android:textSize="16dp"/>
+                        android:textSize="16dp"
+                        android:layout_alignParentRight="true"
+                        android:textColor="#000000"/>
+
+                    </RelativeLayout>
                 </LinearLayout>
 
             </LinearLayout>
