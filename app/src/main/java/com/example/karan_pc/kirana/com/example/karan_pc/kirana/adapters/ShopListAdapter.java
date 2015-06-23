@@ -98,7 +98,7 @@ public class ShopListAdapter extends BaseAdapter {
                         } else if (item.getItemId() == R.id.popEditShop) {
 
                         } else if( item.getItemId() == R.id.popDeleteShop) {
-                            final String loginUrl = "http://52.0.139.50:8080/KiranaService/v1/shop/delete/17?userToken=abe3a6da-ddfd-4f15-ae93-aac90b8fff7a";
+                            final String loginUrl = "http://52.0.139.50:8080/KiranaService/v1/shop/delete/18?userToken=4bff0c31-6970-4f78-a156-0b3537c0861e";
                             BackgroundTask task = new BackgroundTask();
                             task.execute(loginUrl,position + "");
                         }

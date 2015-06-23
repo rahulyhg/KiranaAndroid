@@ -95,6 +95,7 @@ public class RegisterShopFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             JSONObject obj = new JSONObject();
+            String responseCode = null;
             try {
                 obj.put("name", params[0]);
                 obj.put("address", params[1]);
@@ -132,7 +133,7 @@ public class RegisterShopFragment extends Fragment {
                     e.printStackTrace();
                 }
                 finally {
-                    String responseCode = urlConnection.getResponseCode() + "";
+                    responseCode = urlConnection.getResponseCode() + "";
                     String responseMessage = urlConnection.getResponseMessage();
                     urlConnection.disconnect();
                 }
@@ -140,12 +141,15 @@ public class RegisterShopFragment extends Fragment {
 
             }
             System.out.print(obj);
-            return "Yo";
+            return responseCode;
         }
 
         @Override
         protected void onPostExecute(String user) {
-            publishProgress(user);
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.homeDrawerFrame, new UploadProductListFragment())
+                    .commit();
         }
     }
 }

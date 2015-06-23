@@ -24,7 +24,7 @@
                 android:id="@+id/txtUploadProductList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Upload Product list as CSV file from device"
+                android:text="Upload Product list CSV file from phone"
                 android:gravity="center"
                 android:layout_marginBottom="30dp"/>
 
