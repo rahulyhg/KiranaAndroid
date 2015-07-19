@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/popEditShop"
+        android:title="Edit Shop"
+        />
+
+    <item
+        android:id="@+id/popDeleteShop"
+        android:title="Delete Shop"
+        />
+
+    <item
+        android:id="@+id/popAddUser"
+        android:title="Add User"
+        />
+
+    <item
+        android:id="@+id/popEditUser"
+        android:title="Edit User"
+        />
+
+    <item
+        android:id="@+id/popDeleteUser"
+        android:title="Delete User"
+        />
+
+    <item
+        android:id="@+id/popShowProductList"
+        android:title="Show Product List"
+        />
+
+</menu>

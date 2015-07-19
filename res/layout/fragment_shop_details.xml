@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_full_bg_color">
+    
+    <FrameLayout
+        android:id="@+id/flShops"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+    <ListView
+        android:id="@+id/lvwShops"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:divider="@null"/>
+    
+    <ImageButton
+        android:id="@+id/ibtCreateShop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/add"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@null"/>
+    
+    </FrameLayout>
+
+</RelativeLayout>

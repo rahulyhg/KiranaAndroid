@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_full_bg_color">
+
+    <ScrollView
+        android:id="@+id/svLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fillViewport="true"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:id="@+id/llUploadProductList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rectangle_bg_shape"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/txtUploadProductList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload Product List CSV File From Device"
+                android:gravity="center"
+                android:layout_marginBottom="30dp" />
+
+            <Button
+                android:id="@+id/btnBrowseCSV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Browse Product List File"
+                android:layout_marginBottom="20dp" />
+            
+            <LinearLayout
+                android:id="@+id/llUpload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                android:weightSum="1.0">
+
+            <Button
+                android:id="@+id/btnUploadLater"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Upload Later"
+                android:layout_weight="0.5" />
+            
+            <Button
+                android:id="@+id/btnUploadNow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Upload Now"
+                android:layout_weight="0.5" />
+            
+            </LinearLayout>
+            
+            <TextView
+                android:id="@+id/txtFilePath"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textColor="#006400" />
+            
+            <ProgressBar
+		        android:id="@+id/progressBar"
+		        style="?android:attr/progressBarStyleHorizontal"
+		        android:layout_width="fill_parent"
+		        android:layout_height="20dp"
+		        android:visibility="gone" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

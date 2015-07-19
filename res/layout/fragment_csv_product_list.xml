@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_full_bg_color">
+    
+    <TextView
+        android:id="@+id/txtHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Products to display"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp" />
+    
+    <FrameLayout
+        android:id="@+id/flCSVProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_below="@+id/txtHelp">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lvwCSVProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:divider="@null"/>
+    
+    <RelativeLayout
+        android:id="@+id/rlFloatCSVProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_gravity="end|bottom">
+    
+    <ImageButton
+        android:id="@+id/ibtAddCSVProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/add"
+        android:background="@null"
+        android:layout_marginBottom="20dp"/>
+    
+    <ImageButton
+        android:id="@+id/ibtUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/upload"
+        android:layout_below="@+id/ibtAddCSVProduct"
+        android:background="@null"
+        android:visibility="gone" />
+    
+    </RelativeLayout>
+    
+    </FrameLayout>
+
+</RelativeLayout>

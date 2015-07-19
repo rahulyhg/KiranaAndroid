@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_full_bg_color">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/llLoginParentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rectangle_bg_shape">
+
+            <EditText
+                android:id="@+id/edtShopName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Shop Name"
+                android:inputType="text"
+                android:layout_marginBottom="20dp" />
+
+            <Spinner
+                android:id="@+id/spnShopType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/shop_type"
+                android:spinnerMode="dialog"
+                android:layout_marginBottom="20dp" />
+
+            <EditText
+                android:id="@+id/edtAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Address"
+                android:inputType="text"
+                android:layout_marginBottom="20dp" />
+
+            <EditText
+                android:id="@+id/edtMobileNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mobile Number"
+                android:inputType="number"
+                android:layout_marginBottom="20dp" />
+
+            <EditText
+                android:id="@+id/edtWebsite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Website"
+                android:inputType="text"
+                android:layout_marginBottom="20dp" />
+
+            <EditText
+                android:id="@+id/edtTinNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tin Number"
+                android:inputType="number"
+                android:layout_marginBottom="20dp" />
+
+            <EditText
+                android:id="@+id/edtVat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Vat"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="20dp" />
+
+            <LinearLayout
+                android:id="@+id/llTax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:layout_marginBottom="20dp" >
+
+                <EditText
+                    android:id="@+id/edtServiceTax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Service Tax"
+                    android:inputType="number"
+                    android:layout_weight="0.5"/>
+
+                <EditText
+                    android:id="@+id/edtServiceCharge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Service Charge"
+                    android:inputType="number"
+                    android:layout_weight="0.5"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+            <Button
+                android:id="@+id/btnCreateShop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create Shop"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    
+    <android.support.v7.widget.CardView
+        android:id="@+id/cvwProductDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+        
+        <LinearLayout
+            android:id="@+id/llProductDetail"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:padding="10dp">
+	        
+            <RelativeLayout
+                android:id="@+id/rlProductName"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginBottom="10dp">
+		        
+                <TextView
+                    android:id="@+id/txtProductName"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="Product Name"
+                    android:layout_centerInParent="true"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+                
+                <ImageButton
+                   android:id="@+id/ibtPopupProductDetails"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/dots"
+                   android:layout_alignParentRight="true"
+                   android:layout_centerHorizontal="true"
+                   android:background="@null"/>
+        
+            </RelativeLayout>
+            
+            <RelativeLayout
+                android:id="@+id/rlProductPriceQty"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginBottom="10dp">
+                
+                <LinearLayout
+	                android:id="@+id/llProductPrice"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:orientation="horizontal">
+			        
+                    <TextView
+	                    android:id="@+id/txtProductPriceLbl"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:textStyle="bold"
+				        android:text="Price: " />
+                    <TextView
+	                    android:id="@+id/txtProductPrice"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="" />
+                    
+		        </LinearLayout>
+		        
+                <LinearLayout
+	                android:id="@+id/llProductQty"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:orientation="horizontal"
+			        android:layout_alignParentRight="true">
+                    
+                    <TextView
+	                    android:id="@+id/txtProductQtyLbl"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:textStyle="bold"
+				        android:text="Quantity: " />
+                    <TextView
+	                    android:id="@+id/txtProductQty"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="" />
+		        </LinearLayout>
+                
+            </RelativeLayout>
+            
+            <RelativeLayout
+                android:id="@+id/rlProductDiscountTax"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginBottom="10dp">
+                
+                <LinearLayout
+	                android:id="@+id/llProductDiscount"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:orientation="horizontal">
+			        
+                    <TextView
+	                    android:id="@+id/txtProductDiscountLbl"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:textStyle="bold"
+				        android:text="Discount: " />
+                    <TextView
+	                    android:id="@+id/txtProductDiscount"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="" />
+                    
+		        </LinearLayout>
+		        
+                <LinearLayout
+	                android:id="@+id/llProductTax"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:orientation="horizontal"
+			        android:layout_alignParentRight="true">
+                    
+                    <TextView
+	                    android:id="@+id/txtProductTaxLbl"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:textStyle="bold"
+				        android:text="Tax Bracket: " />
+                    <TextView
+	                    android:id="@+id/txtProductTax"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="" />
+		        </LinearLayout>
+                
+            </RelativeLayout>
+	        
+        </LinearLayout>
+        
+    </android.support.v7.widget.CardView>
+    
+
+</RelativeLayout>

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <ScrollView
+        android:id="@+id/svCSV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/llCSV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+    
+		    <LinearLayout
+		        android:id="@+id/llName"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:weightSum="1.0"
+			    android:gravity="center">
+			    <TextView
+			        android:id="@+id/txtNameLbl"
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="0.25"
+				    android:text="Name"
+				    android:textColor="#000000" />
+			    <LinearLayout
+			        android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_weight="0.75">
+				    <EditText
+				        android:id="@+id/txtNameValue"
+				        android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:textColor="#000000" />
+			    </LinearLayout>
+		    </LinearLayout>
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:weightSum="1.0"
+			    android:gravity="center"
+			    android:id="@+id/llQuantity">
+			    <TextView
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="0.25"
+				    android:text="Quantity"
+				    android:id="@+id/txtQtyLbl"
+				    android:textColor="#000000" />
+			    <LinearLayout
+			        android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_weight="0.75">
+				    <EditText
+				        android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:id="@+id/txtQtyValue"
+					    android:inputType="numberDecimal"
+					    android:textColor="#000000" />
+			    </LinearLayout>
+		    </LinearLayout>
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:weightSum="1.0"
+			    android:gravity="center"
+			    android:id="@+id/llPrice">
+			    <TextView
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="0.25"
+				    android:text="Price"
+				    android:id="@+id/txtPriceLbl"
+				    android:textColor="#000000" />
+			    <LinearLayout
+			        android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_weight="0.75">
+				    <EditText
+				        android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:id="@+id/txtPriceValue"
+					    android:inputType="numberDecimal"
+					    android:textColor="#000000" />
+			    </LinearLayout>
+		    </LinearLayout>
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:weightSum="1.0"
+			    android:gravity="center"
+			    android:id="@+id/llDiscount">
+			    <TextView
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="0.25"
+				    android:text="Discount"
+				    android:id="@+id/txtDiscountLbl"
+				    android:textColor="#000000" />
+			    <LinearLayout
+			        android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_weight="0.75">
+				    <EditText
+				        android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:id="@+id/txtDiscountValue"
+					    android:inputType="numberDecimal"
+					    android:textColor="#000000" />
+			    </LinearLayout>
+		    </LinearLayout>
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:weightSum="1.0"
+			    android:gravity="center"
+			    android:id="@+id/llTax">
+			    <TextView
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="0.25"
+				    android:text="Tax"
+				    android:id="@+id/txtTaxLbl"
+				    android:textColor="#000000" />
+			    <LinearLayout
+			        android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_weight="0.75">
+				    <EditText
+				        android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:id="@+id/txtTaxValue"
+					    android:inputType="numberDecimal"
+					    android:textColor="#000000" />
+			    </LinearLayout>
+		    </LinearLayout>
+		    <LinearLayout
+		        android:id="@+id/llImageBrowse"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical">
+			    <LinearLayout
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:weightSum="1.0"
+				    android:gravity="center">
+				    <TextView
+					    android:layout_width="0dp"
+					    android:layout_height="wrap_content"
+					    android:layout_weight="0.25"
+					    android:text="Image"
+					    android:id="@+id/txtImageLbl"
+					    android:textColor="#000000" />
+				    <LinearLayout
+				        android:layout_width="0dp"
+					    android:layout_height="wrap_content"
+					    android:orientation="horizontal"
+					    android:layout_weight="0.75"
+					    android:weightSum="1.0"
+					    android:gravity="center">
+					    <TextView
+					        android:layout_width="0dp"
+						    android:layout_height="wrap_content"
+						    android:text="No Image Selected"
+						    android:id="@+id/txtImageValue"
+						    android:layout_weight="0.9"
+						    android:textColor="#000000" />
+					    <ImageButton
+	                        android:id="@+id/ibtPopupImage"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:src="@drawable/ic_launcher"
+	                        android:layout_weight="0.1"
+	                        android:background="@null"/>
+				    </LinearLayout>
+			    </LinearLayout>
+		    </LinearLayout>
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:weightSum="1.0"
+			    android:gravity="center"
+			    android:id="@+id/llExtra1">
+			    <TextView
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="0.25"
+				    android:text="Extra 1"
+				    android:id="@+id/txtExtra1Lbl"
+				    android:textColor="#000000" />
+			    <LinearLayout
+			        android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_weight="0.75">
+				    <EditText
+				        android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:id="@+id/txtExtra1Value"
+					    android:textColor="#000000" />
+			    </LinearLayout>
+		    </LinearLayout>
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:weightSum="1.0"
+			    android:gravity="center"
+			    android:id="@+id/llExtra2">
+			    <TextView
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="0.25"
+				    android:text="Extra 2"
+				    android:id="@+id/txtExtra2Lbl"
+				    android:textColor="#000000" />
+			    <LinearLayout
+			        android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_weight="0.75">
+				    <EditText
+				        android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:id="@+id/txtExtra2Value"
+					    android:textColor="#000000" />
+			    </LinearLayout>
+		    </LinearLayout>
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:weightSum="1.0"
+			    android:gravity="center"
+			    android:id="@+id/llExtra3">
+			    <TextView
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="0.25"
+				    android:text="Extra 3"
+				    android:id="@+id/txtExtra3Lbl"
+				    android:textColor="#000000" />
+			    <LinearLayout
+			        android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_weight="0.75">
+				    <EditText
+				        android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:id="@+id/txtExtra3Value"
+					    android:textColor="#000000" />
+			    </LinearLayout>
+		    </LinearLayout>
+		    <LinearLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:weightSum="1.0"
+			    android:gravity="center"
+			    android:id="@+id/llExtra4">
+			    <TextView
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="0.25"
+				    android:text="Extra 4"
+				    android:id="@+id/txtExtra4Lbl"
+				    android:textColor="#000000" />
+			    <LinearLayout
+			        android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_weight="0.75">
+				    <EditText
+				        android:layout_width="match_parent"
+					    android:layout_height="wrap_content"
+					    android:id="@+id/txtExtra4Value"
+					    android:textColor="#000000" />
+			    </LinearLayout>
+		    </LinearLayout>
+		    <LinearLayout
+		        android:id="@+id/rlCancelOkbuttons"
+		        android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal"
+			    android:weightSum="1.0">
+			    <Button
+			        android:layout_width="0dp"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="0.5"
+			        android:text="Cancel"
+			        android:id="@+id/btnCancel"
+			        android:textColor="#000000" />
+			    <Button
+			        android:layout_width="0dp"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="0.5"
+			        android:text="OK"
+			        android:id="@+id/btnOk"
+			        android:textColor="#000000" />
+    		</LinearLayout>
+    
+    	</LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

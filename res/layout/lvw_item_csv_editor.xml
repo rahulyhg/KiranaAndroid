@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+        android:id="@+id/lledtCSV"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal">
+    	
+    <EditText
+        android:id="@+id/edtProductId"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content" />
+    
+    <EditText
+        android:id="@+id/edtProductQty"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content" />
+    
+    <EditText
+        android:id="@+id/edtProductPrice"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content" />
+    
+    <EditText
+        android:id="@+id/edtProductDiscount"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content" />
+    
+    <EditText
+        android:id="@+id/edtProductTax"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content" />
+    
+    <EditText
+        android:id="@+id/edtProductExtra1"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content" />
+    
+    <EditText
+        android:id="@+id/edtProductExtra2"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content" />
+    
+    <EditText
+        android:id="@+id/edtProductExtra3"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content" />
+    
+    <EditText
+        android:id="@+id/edtProductExtra4"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content" />
+    	
+    <TextView
+	     android:id="@+id/txtPathCSV"
+	     android:layout_width="wrap_content"
+	 	 android:layout_height="wrap_content"
+	 	 android:text="Path" />
+    
+    <ImageButton
+	    android:id="@+id/btnImage"
+	    android:layout_width="wrap_content"
+	 	android:layout_height="wrap_content"
+	 	android:src="@drawable/ic_launcher"
+	 	android:background="@null" />
+    
+	</LinearLayout>
+	
+</RelativeLayout>
