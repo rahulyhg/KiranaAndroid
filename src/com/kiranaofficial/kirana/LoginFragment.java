@@ -1,5 +1,8 @@
 package com.kiranaofficial.kirana;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 /**
  * Created by Karan-PC on 17-05-2015.
@@ -80,11 +82,22 @@ public class LoginFragment extends Fragment {
         	progress.dismiss();
             if(user != null) {
                 if(user.getMajorCode() == 200) {
+                	
                 	edtUsername.setText("");
                 	edtPassword.setText("");
                     storage.setId(user.getId());
                     storage.setUserToken(user.getUserToken());
                     storage.setUserName(user.getUserName());
+                    storage.setShop(user.getShop());
+                    
+                    final String productsUrl = "http://54.169.108.240:8080/KiranaService/v1/product/own?userToken=" + user.getUserToken();
+                    DownloadMenuBackgroundTask task = new DownloadMenuBackgroundTask();
+                    if(Common.IsOnline(context)) {
+                    	task.execute(productsUrl);
+                    } else {
+                    	Common.ShowNoNetworkToast(context);
+                    }
+                    
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("loggedInUser", user);
                     homeIntent = new Intent(getActivity(), HomeActivity.class);
@@ -104,6 +117,50 @@ public class LoginFragment extends Fragment {
                 	Common.ShowWebServiceResponse(context, serviceMsg);
                 }
             } else {
+            	String serviceMsg = "Web service error";
+            	Common.ShowWebServiceResponse(context, serviceMsg);
+            }
+        }
+    }
+    
+    private class DownloadMenuBackgroundTask extends AsyncTask<String, String, List<ProductUpload>> {
+
+        @Override
+        protected void onPreExecute() {
+            publishProgress("Called the login web service");
+            progress = ProgressDialog.show(getActivity(), "Kirana", "Loading Menu");
+        }
+
+        @Override
+        protected List<ProductUpload> doInBackground(String... params) {
+            String serviceContent = HttpManagerProductGet.GetServiceData(params[0]);
+            List<ProductUpload> products = new ArrayList<ProductUpload>();
+            if(serviceContent != null)
+            	products = ProductJSONParser.getLoginData(serviceContent);
+            return products;
+        }
+
+        @Override
+        protected void onPostExecute(List<ProductUpload> products) {
+        	progress.dismiss();
+        	storage.setProducts(products);
+            if(products != null) {
+            	if(products.size() != 0) {
+	            	int code = products.get(0).getMajorCode();
+	            	if(code == 200) {
+	            		
+	            	} else if(code == 401) {
+	                	String serviceMsg = "Unauthorized user";
+	                	Common.ShowWebServiceResponse(context, serviceMsg);
+	                } else if(code == 403){
+	                	String serviceMsg = "Service forbidden";
+	                	Common.ShowWebServiceResponse(context, serviceMsg);
+	                } else if(code == 500){
+	                	String serviceMsg = "500 Web service error";
+	                	Common.ShowWebServiceResponse(context, serviceMsg);
+	                }
+            	}
+            }  else {
             	String serviceMsg = "Web service error";
             	Common.ShowWebServiceResponse(context, serviceMsg);
             }

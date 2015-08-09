@@ -1,28 +1,23 @@
 package com.kiranaofficial.kirana.adapters;
 
+import java.util.List;
+
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-
-import java.util.List;
 
 import com.kiranaofficial.kirana.HttpManagerDelete;
 import com.kiranaofficial.kirana.IDeleteShop;
 import com.kiranaofficial.kirana.ProductListFragment;
 import com.kiranaofficial.kirana.R;
-import com.kiranaofficial.kirana.RegisterShopFragment;
 import com.kiranaofficial.kirana.Shop;
 
 /**

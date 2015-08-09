@@ -27,4 +27,8 @@ public class Common {
 	public static void ShowAlertDialog(Context context, String alertMsg) {
 		Toast.makeText(context, alertMsg, Toast.LENGTH_LONG).show();
 	}
+	
+	public static void ShowFileNameEmpty(Context context, String alertMsg) {
+		Toast.makeText(context, alertMsg, Toast.LENGTH_LONG).show();
+	}
 }

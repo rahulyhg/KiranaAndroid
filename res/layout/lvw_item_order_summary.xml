@@ -19,6 +19,7 @@
 	        android:id="@+id/txtProductName"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
 	        android:text="Name" />
 	    
 	    <TextView
@@ -28,12 +29,29 @@
 	        android:text="4"
 	        android:layout_centerInParent="true" />
 	    
+	    <LinearLayout
+	        android:id="@+id/llCostImg"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerVertical="true">
+	    
 	    <TextView
 	        android:id="@+id/txtTotalProductCost"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="Rs.100"
-	        android:layout_alignParentRight="true" />
+	        android:layout_gravity="center_vertical"
+	        android:text="Rs.100" />
+	    
+	    <ImageButton
+            android:id="@+id/ibtPopupOrderSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/dots"
+            android:background="@null"/>
+	    
+	    </LinearLayout>
 	    
 	    </RelativeLayout>
     

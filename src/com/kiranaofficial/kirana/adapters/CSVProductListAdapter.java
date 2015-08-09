@@ -9,13 +9,11 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kiranaofficial.kirana.CSVProduct;
 import com.kiranaofficial.kirana.R;
-import com.kiranaofficial.kirana.adapters.CSVProductListAdapter.CSVProductViewHolder;
 
 public class CSVProductListAdapter extends RecyclerView.Adapter<CSVProductListAdapter.CSVProductViewHolder> {
 

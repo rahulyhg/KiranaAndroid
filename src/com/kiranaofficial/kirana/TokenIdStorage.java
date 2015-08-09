@@ -1,5 +1,7 @@
 package com.kiranaofficial.kirana;
 
+import java.util.List;
+
 import android.app.Application;
 
 /**
@@ -10,6 +12,8 @@ public class TokenIdStorage extends Application {
     int id;
     String userToken;
     String userName;
+    List<ProductUpload> products;
+    Shop shop;
 
     public int getId() {
         return id;
@@ -34,4 +38,21 @@ public class TokenIdStorage extends Application {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
+	}
+	
+	public List<ProductUpload> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<ProductUpload> products) {
+		this.products = products;
+	}
+	
 }

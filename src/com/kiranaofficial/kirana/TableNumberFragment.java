@@ -2,6 +2,7 @@ package com.kiranaofficial.kirana;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,14 @@ public class TableNumberFragment extends Fragment{
 	EditText tableNumber;
 	Button submitTableNumber;
 	String tableNum = null;
+	FragmentManager fragmentManager;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_table_number, container, false);
         
         tableNumber = (EditText)rootView.findViewById(R.id.edtTableNum);
         submitTableNumber = (Button)rootView.findViewById(R.id.btnTableNumber);
+        fragmentManager = getActivity().getSupportFragmentManager();
         
         submitTableNumber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,10 +30,14 @@ public class TableNumberFragment extends Fragment{
 	            if(tableNum.isEmpty()) {
 	            	tableNumber.setError("Please enter Table Number");
 	            } else {
-	            	getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.homeDrawerFrame, new MenuOrderFragment())
-                    .commit();
+	            	Bundle tableBundle = new Bundle();
+	            	tableBundle.putString("TableNumber", tableNum);
+	            	MenuOrderFragment menuFragment = new MenuOrderFragment();
+	            	menuFragment.setArguments(tableBundle);
+	            	android.support.v4.app.FragmentManager manager = fragmentManager;
+	            	android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
+	            	transaction.replace(R.id.homeDrawerFrame, menuFragment);
+	            	transaction.commit();
 	            }
             }
         });

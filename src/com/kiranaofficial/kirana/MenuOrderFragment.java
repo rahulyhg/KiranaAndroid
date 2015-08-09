@@ -1,40 +1,62 @@
 package com.kiranaofficial.kirana;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-import com.kiranaofficial.kirana.adapters.MenuOrderAdapter;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class MenuOrderFragment extends android.support.v4.app.Fragment{
+import com.kiranaofficial.kirana.adapters.MenuOrderAdapter;
+
+public class MenuOrderFragment extends android.support.v4.app.Fragment implements LocationListener{
 	
 	ListView lvwMenuOrder;
 	Button btnMenuOrder;
 	Context context;
 	TokenIdStorage storage;
 	ProgressDialog progress;
-	String userToken = null;
+	String userToken = null, tableNumber, provider, currentDateandTime;
 	EditText searchProducts;
 	MenuOrderAdapter adapter;
-	int PRODUCT_QUANTITY = 30;
+	int PRODUCT_QUANTITY = 30, edtProductQty = 0;
+	List<ProductOrderSummary> summaryProducts;
+	HashMap<String, Integer> menuHashMap;
+	HashMap<String, String> extraInfoHashMap;
+	TextView txtCartQty;
+	LocationManager locationManager;
+	double latitude = 0f, longitude = 0f;
+	String strResponseAfterOrder = null;
+	TableOrder tableOrder = null;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_menu_order, container, false);
@@ -42,11 +64,25 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment{
         lvwMenuOrder = (ListView)rootView.findViewById(R.id.lvwMenuOrder);
         btnMenuOrder = (Button)rootView.findViewById(R.id.btnMenuOrder);
         searchProducts = (EditText)rootView.findViewById(R.id.searchProducts);
+        txtCartQty = (TextView)rootView.findViewById(R.id.txtCartQty);
+        
+        summaryProducts = new ArrayList<ProductOrderSummary>();
         
         storage = (TokenIdStorage) getActivity().getApplicationContext();
         userToken = storage.getUserToken();
+        tableNumber = getArguments().getString("TableNumber");
+        context = getActivity();
         
         initializeData();
+        locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+        
+        if (location != null) {
+          onLocationChanged(location);
+        } else {
+        }
         
         searchProducts.addTextChangedListener(new TextWatcher() {
 			
@@ -66,85 +102,256 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment{
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
 				String queryProduct = searchProducts.getText().toString().toLowerCase();
-				adapter.filter(queryProduct);
+				if(adapter != null)
+					adapter.filter(queryProduct);
+			}
+		});
+        
+        btnMenuOrder.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(summaryProducts != null && summaryProducts.size() > 0) {
+					menuHashMap = new HashMap<String, Integer>();
+					extraInfoHashMap = new HashMap<String, String>();
+					for(int i = 0;i<summaryProducts.size();i++) {
+						String pdtName = summaryProducts.get(i).productName;
+						int quantity = Integer.parseInt(summaryProducts.get(i).productQty);
+						//double totalCost = Double.parseDouble(summaryProducts.get(i).getProductTotalCost());
+						menuHashMap.put(pdtName, quantity);
+					}
+					SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+					currentDateandTime = dateFormatter.format(new Date());
+					
+					extraInfoHashMap.put("TableNumber", tableNumber);
+					extraInfoHashMap.put("LocationCoordinates", latitude + "_" + longitude);
+					extraInfoHashMap.put("IsBillPrinted", "NO");
+					
+					String uploadMenuUrl = "http://54.169.108.240:8080/KiranaService/v1/order/create?userToken=" + userToken;
+					UploadOrdersBackgroundTask task = new UploadOrdersBackgroundTask();
+			        if(Common.IsOnline(context)) {
+			        	task.execute(uploadMenuUrl);
+			        } else {
+			        	Common.ShowNoNetworkToast(context);
+			        }
+				}
 			}
 		});
         
         return rootView;
 	}
+	
+	/* Request updates at startup */
+	  @Override
+	public void onResume() {
+	    super.onResume();
+	    locationManager.requestLocationUpdates(provider, 400, 1, this);
+	  }
+
+    /* Remove the locationlistener updates when Activity is paused */
+	  @Override
+	public void onPause() {
+	    super.onPause();
+	    locationManager.removeUpdates(this);
+    }
 
 	private void initializeData(){
-    	context = getActivity();
-    	String userToken = storage.getUserToken();
-    	final String productsUrl = "http://54.169.108.240:8080/KiranaService/v1/product/own?userToken=" + userToken;
-        BackgroundTask task = new BackgroundTask();
-        if(Common.IsOnline(context)) {
-        	task.execute(productsUrl);
-        } else {
-        	Common.ShowNoNetworkToast(context);
-        }
+		List<ProductUpload> products = new ArrayList<ProductUpload>();
+		products = storage.getProducts();
+		if(products != null) {
+			adapter = new MenuOrderAdapter(getActivity(),products, new IOrderQuantity() {
+	
+				@Override
+				public void getOrderQuantity(String strProductName,String strProductPrice) {
+					// TODO Auto-generated method stub
+					boolean isEdit = false;
+					for(int i = 0;i<summaryProducts.size();i++) {
+						if(strProductName.equalsIgnoreCase(summaryProducts.get(i).getProductName())) {
+							edtProductQty = Integer.parseInt(summaryProducts.get(i).getProductQty());
+							isEdit = true;
+							break;
+						} else {
+							edtProductQty = 0;
+							isEdit = false;
+						}
+					}
+					Intent ProductQuantity = new Intent(context,OrderQuantityActivity.class);
+					ProductQuantity.putExtra("ProductName",strProductName);
+					ProductQuantity.putExtra("ProductPrice", strProductPrice);
+					if(isEdit)
+						ProductQuantity.putExtra("ProductEdtQty", edtProductQty);
+					else 
+						ProductQuantity.putExtra("ProductEdtQty", 0);
+					
+					startActivityForResult(ProductQuantity, PRODUCT_QUANTITY);
+				}
+			});
+			lvwMenuOrder.setAdapter(adapter);
+		}
     }
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		ProductOrderSummary summaryProduct;
 		if(resultCode == Activity.RESULT_OK) {
-			int qty = data.getIntExtra("ProductQty", 0);
+			boolean isContainsProduct = false;
+			int editedQtyProductPos = 0;
 			String productNameSelected = data.getStringExtra("ProductNameSelected");
+			int qty = data.getIntExtra("ProductQty", 0);
+			//double productPrice = data.getDoubleExtra("ProductPrice", 0.0);
+			
+			if(qty > 0) {
+				for(int i = 0;i<summaryProducts.size();i++) {
+					if(productNameSelected.equalsIgnoreCase(summaryProducts.get(i).getProductName())) {
+						isContainsProduct = true;
+						editedQtyProductPos = i;
+						break;
+					}
+				}
+				if(!isContainsProduct) {
+					summaryProduct = new ProductOrderSummary();
+					summaryProduct.setProductName(productNameSelected);
+					summaryProduct.setProductQty(qty + "");
+					//summaryProduct.setProductTotalCost(productPrice + "");
+					summaryProducts.add(summaryProduct);
+				} else {
+					summaryProduct = new ProductOrderSummary();
+					summaryProduct.setProductName(productNameSelected);
+					summaryProduct.setProductQty(qty + "");
+					//summaryProduct.setProductTotalCost(productPrice + "");
+					summaryProducts.set(editedQtyProductPos, summaryProduct);
+				}
+			} else {
+				boolean isRemoveProduct = false;
+				int removePos = 0;
+				for(int i = 0;i<summaryProducts.size();i++) {
+					if(productNameSelected.equalsIgnoreCase(summaryProducts.get(i).getProductName())) {
+						isRemoveProduct = true;
+						removePos = i;
+						break;
+					}
+				}
+				if(isRemoveProduct) {
+					summaryProducts.remove(removePos);
+				}
+			}
+			if(summaryProducts.size() != 0) {
+				txtCartQty.setVisibility(View.VISIBLE);
+				txtCartQty.setText(summaryProducts.size() + "");
+			} else {
+				txtCartQty.setVisibility(View.INVISIBLE);
+			}
 		}
 	}
 	
-	private class BackgroundTask extends AsyncTask<String, String, List<ProductUpload>> {
+	private class UploadOrdersBackgroundTask extends AsyncTask<String, String, Integer> {
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
 
-        @Override
-        protected void onPreExecute() {
-            publishProgress("Called the login web service");
-            progress = ProgressDialog.show(getActivity(), "Kirana", "Loading Menu");
-        }
+		@Override
+		protected Integer doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			JSONObject obj = new JSONObject();
+			try {
+				
+				String strMenu = menuHashMap.toString().replace('=', ':');
+				String strExtraInfo = extraInfoHashMap.toString().replace('=', ':');
+				
+				JSONObject menuObject = new JSONObject(strMenu);
+				JSONObject extraInfoObject = new JSONObject(strExtraInfo);
+				
+				obj.put("createdAt", currentDateandTime);
+				obj.put("updatedAt", currentDateandTime);
+				obj.put("orderList", menuObject);
+				obj.put("extraInfo", extraInfoObject);
+				
+				Integer responseCode = null;
+				String objString = obj.toString();
+				
+				URL url = new URL(params[0]);
+                HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type","application/json");
+                try {
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setChunkedStreamingMode(0);
 
-        @Override
-        protected List<ProductUpload> doInBackground(String... params) {
-            String serviceContent = HttpManagerProductGet.GetServiceData(params[0]);
-            List<ProductUpload> products = new ArrayList<ProductUpload>();
-            if(serviceContent != null)
-            	products = ProductJSONParser.getLoginData(serviceContent);
-            return products;
-        }
+                    OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+                    out.write(objString.getBytes());
+                    out.flush();
+                    out.close();
 
-        @Override
-        protected void onPostExecute(List<ProductUpload> products) {
-        	progress.dismiss();
-            if(products != null) {
-            	if(products.size() != 0) {
-	            	int code = products.get(0).getMajorCode();
-	            	if(code == 200) {
-	            		if(products.size()>0) {
-		            		adapter = new MenuOrderAdapter(getActivity(),products, new IOrderQuantity() {
+                    InputStream is = new BufferedInputStream(urlConnection.getInputStream());
+                    BufferedReader in = new BufferedReader(new InputStreamReader(is));
+                    //while ((inputLine = in.readLine()) != null)
+                        //System.out.println(inputLine);
+                    strResponseAfterOrder = in.readLine();
+                    is.close();
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    responseCode = urlConnection.getResponseCode();
+                    String responseString = urlConnection.getResponseMessage();
+                    
+                    urlConnection.disconnect();
+                }
+                return responseCode;
+            } catch(Exception e) {
 
-								@Override
-								public void getOrderQuantity(String strProductName,String strProductPrice) {
-									// TODO Auto-generated method stub
-									Intent ProductQuantity = new Intent(context,OrderQuantityActivity.class);
-									ProductQuantity.putExtra("ProductName",strProductName);
-									ProductQuantity.putExtra("ProductPrice", strProductPrice);
-									startActivityForResult(ProductQuantity, PRODUCT_QUANTITY);
-								}
-		            		});
-		            		lvwMenuOrder.setAdapter(adapter);
-	            		} 
-	            	} else if(code == 401) {
-	                	String serviceMsg = "Unauthorized user";
-	                	Common.ShowWebServiceResponse(context, serviceMsg);
-	                } else if(code == 403){
-	                	String serviceMsg = "Service forbidden";
-	                	Common.ShowWebServiceResponse(context, serviceMsg);
-	                } else if(code == 500){
-	                	String serviceMsg = "500 Web service error";
-	                	Common.ShowWebServiceResponse(context, serviceMsg);
-	                }
-            	}
-            }  else {
-            	String serviceMsg = "Web service error";
-            	Common.ShowWebServiceResponse(context, serviceMsg);
             }
-        }
-    }
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			if(result == 200) {
+				tableOrder = TableOrderJSONParser.getOrderForTable(strResponseAfterOrder);
+				String tableId = tableOrder.getId();
+				
+				OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
+				Bundle tableBundle = new Bundle();
+				tableBundle.putString("TableId", tableId);
+				orderSummaryFragment.setArguments(tableBundle);
+				
+            	android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager();
+            	android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
+            	transaction.replace(R.id.homeDrawerFrame, orderSummaryFragment);
+            	transaction.commit();
+			}
+		}
+		
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		latitude = location.getLatitude();
+	    longitude = location.getLongitude();
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

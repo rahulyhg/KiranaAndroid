@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kiranaofficial.kirana" >
     
-    <uses-sdk android:minSdkVersion="11"
+    <uses-sdk android:minSdkVersion="15"
           android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,6 +13,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
 
     <application
         android:name="com.kiranaofficial.kirana.TokenIdStorage"
@@ -99,6 +103,15 @@
             android:label="Order Quantity"
             android:theme="@android:style/Theme.Holo.Light.Dialog" >
         </activity>
+        
+        <activity android:name="PrintButtonActivity"
+                  android:label="BT Discovery">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name="BTDeviceList"></activity>
     </application>
 
 </manifest>
