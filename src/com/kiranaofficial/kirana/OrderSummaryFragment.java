@@ -104,7 +104,28 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
 			}
 		});
 		
+		btnAddMore.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				navigateToMenuOrderUpdate();
+			}
+		});
+		
 		return rootView;
+	}
+	
+	private void navigateToMenuOrderUpdate() {
+		MenuOrderFragmentUpdateOrder menuOrderFragmentUpdateOrder = new MenuOrderFragmentUpdateOrder();
+		Bundle tableBundle = new Bundle();
+		//tableBundle.putString("TableId", tableId);
+		menuOrderFragmentUpdateOrder.setArguments(tableBundle);
+		
+    	android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager();
+    	android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
+    	transaction.replace(R.id.homeDrawerFrame, menuOrderFragmentUpdateOrder);
+    	transaction.commit();
 	}
 	
 	private class BackgroundTask extends AsyncTask<String, String, TableOrder> {
