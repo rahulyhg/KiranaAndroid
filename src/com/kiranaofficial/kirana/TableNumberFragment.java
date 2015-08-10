@@ -15,6 +15,7 @@ public class TableNumberFragment extends Fragment{
 	Button submitTableNumber;
 	String tableNum = null;
 	FragmentManager fragmentManager;
+	TokenIdStorage storage;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_table_number, container, false);
@@ -22,6 +23,8 @@ public class TableNumberFragment extends Fragment{
         tableNumber = (EditText)rootView.findViewById(R.id.edtTableNum);
         submitTableNumber = (Button)rootView.findViewById(R.id.btnTableNumber);
         fragmentManager = getActivity().getSupportFragmentManager();
+        
+        storage = (TokenIdStorage) getActivity().getApplicationContext();
         
         submitTableNumber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,6 +35,8 @@ public class TableNumberFragment extends Fragment{
 	            } else {
 	            	Bundle tableBundle = new Bundle();
 	            	tableBundle.putString("TableNumber", tableNum);
+	            	storage.setTableNumber(tableNum);
+	            	
 	            	MenuOrderFragment menuFragment = new MenuOrderFragment();
 	            	menuFragment.setArguments(tableBundle);
 	            	android.support.v4.app.FragmentManager manager = fragmentManager;

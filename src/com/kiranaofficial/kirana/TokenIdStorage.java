@@ -14,6 +14,11 @@ public class TokenIdStorage extends Application {
     String userName;
     List<ProductUpload> products;
     Shop shop;
+    boolean isUpdateOrderSummary = false;
+    List<ProductUpload> productMenu;
+    String tableNumber;
+    String createdDateTime;
+    String tableId;
 
     public int getId() {
         return id;
@@ -53,6 +58,46 @@ public class TokenIdStorage extends Application {
 
 	public void setProducts(List<ProductUpload> products) {
 		this.products = products;
+	}
+
+	public boolean isUpdateOrderSummary() {
+		return isUpdateOrderSummary;
+	}
+
+	public void setUpdateOrderSummary(boolean isUpdateOrderSummary) {
+		this.isUpdateOrderSummary = isUpdateOrderSummary;
+	}
+
+	public List<ProductUpload> getProductMenu() {
+		return productMenu;
+	}
+
+	public void setProductMenu(List<ProductUpload> productMenu) {
+		this.productMenu = productMenu;
+	}
+
+	public String getTableId() {
+		return tableId;
+	}
+
+	public void setTableId(String tableId) {
+		this.tableId = tableId;
+	}
+
+	public String getTableNumber() {
+		return tableNumber;
+	}
+
+	public void setTableNumber(String tableNumber) {
+		this.tableNumber = tableNumber;
+	}
+
+	public String getCreatedDateTime() {
+		return createdDateTime;
+	}
+
+	public void setCreatedDateTime(String createdDateTime) {
+		this.createdDateTime = createdDateTime;
 	}
 	
 }

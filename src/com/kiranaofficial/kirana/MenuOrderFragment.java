@@ -57,6 +57,15 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
 	double latitude = 0f, longitude = 0f;
 	String strResponseAfterOrder = null;
 	TableOrder tableOrder = null;
+	boolean isUpdateOrderSummary;
+	
+	//update summary order fields
+	
+	List<ProductUpload> productMenu;
+	String updatedDateTime;
+	ProductUpload summaryProductUpdate;
+	
+	//end
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_menu_order, container, false);
@@ -72,6 +81,15 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
         userToken = storage.getUserToken();
         tableNumber = getArguments().getString("TableNumber");
         context = getActivity();
+        
+        //update order summary
+        isUpdateOrderSummary = storage.isUpdateOrderSummary();
+        storage.setUpdateOrderSummary(false);
+        productMenu = storage.getProductMenu();
+        if(productMenu == null) {
+        	productMenu = new ArrayList<ProductUpload>();
+        }
+        //end
         
         initializeData();
         locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -112,29 +130,57 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(summaryProducts != null && summaryProducts.size() > 0) {
-					menuHashMap = new HashMap<String, Integer>();
-					extraInfoHashMap = new HashMap<String, String>();
-					for(int i = 0;i<summaryProducts.size();i++) {
-						String pdtName = summaryProducts.get(i).productName;
-						int quantity = Integer.parseInt(summaryProducts.get(i).productQty);
-						//double totalCost = Double.parseDouble(summaryProducts.get(i).getProductTotalCost());
-						menuHashMap.put(pdtName, quantity);
+				if(!isUpdateOrderSummary) { 
+					if(summaryProducts != null && summaryProducts.size() > 0) {
+						menuHashMap = new HashMap<String, Integer>();
+						extraInfoHashMap = new HashMap<String, String>();
+						for(int i = 0;i<summaryProducts.size();i++) {
+							String pdtName = summaryProducts.get(i).productName;
+							int quantity = Integer.parseInt(summaryProducts.get(i).productQty);
+							//double totalCost = Double.parseDouble(summaryProducts.get(i).getProductTotalCost());
+							menuHashMap.put(pdtName, quantity);
+						}
+						SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+						currentDateandTime = dateFormatter.format(new Date());
+						
+						extraInfoHashMap.put("TableNumber", tableNumber);
+						extraInfoHashMap.put("LocationCoordinates", latitude + "_" + longitude);
+						extraInfoHashMap.put("IsBillPrinted", "NO");
+						
+						String uploadMenuUrl = "http://54.169.108.240:8080/KiranaService/v1/order/create?userToken=" + userToken;
+						UploadOrdersBackgroundTask task = new UploadOrdersBackgroundTask();
+				        if(Common.IsOnline(context)) {
+				        	task.execute(uploadMenuUrl);
+				        } else {
+				        	Common.ShowNoNetworkToast(context);
+				        }
 					}
-					SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-					currentDateandTime = dateFormatter.format(new Date());
-					
-					extraInfoHashMap.put("TableNumber", tableNumber);
-					extraInfoHashMap.put("LocationCoordinates", latitude + "_" + longitude);
-					extraInfoHashMap.put("IsBillPrinted", "NO");
-					
-					String uploadMenuUrl = "http://54.169.108.240:8080/KiranaService/v1/order/create?userToken=" + userToken;
-					UploadOrdersBackgroundTask task = new UploadOrdersBackgroundTask();
-			        if(Common.IsOnline(context)) {
-			        	task.execute(uploadMenuUrl);
-			        } else {
-			        	Common.ShowNoNetworkToast(context);
-			        }
+				} else {
+					//for update summary
+					if(productMenu != null && productMenu.size() > 0) {
+						menuHashMap = new HashMap<String, Integer>();
+						extraInfoHashMap = new HashMap<String, String>();
+						for(int i = 0;i<productMenu.size();i++) {
+							String pdtName = productMenu.get(i).getProductId();
+							int quantity = productMenu.get(i).getQuantity();
+							//double totalCost = Double.parseDouble(summaryProducts.get(i).getProductTotalCost());
+							menuHashMap.put(pdtName, quantity);
+						}
+						SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+						updatedDateTime = dateFormatter.format(new Date());
+						
+						extraInfoHashMap.put("TableNumber", storage.getTableNumber());
+						extraInfoHashMap.put("LocationCoordinates", latitude + "_" + longitude);
+						extraInfoHashMap.put("IsBillPrinted", "NO");
+						
+						String uploadMenuUrl = "http://54.169.108.240:8080/KiranaService/v1/order/update?userToken=" + userToken + "&orderId=" + storage.getTableId();
+						UpdateOrdersBackgroundTask task = new UpdateOrdersBackgroundTask();
+				        if(Common.IsOnline(context)) {
+				        	task.execute(uploadMenuUrl);
+				        } else {
+				        	Common.ShowNoNetworkToast(context);
+				        }
+					}
 				}
 			}
 		});
@@ -165,26 +211,51 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
 				@Override
 				public void getOrderQuantity(String strProductName,String strProductPrice) {
 					// TODO Auto-generated method stub
-					boolean isEdit = false;
-					for(int i = 0;i<summaryProducts.size();i++) {
-						if(strProductName.equalsIgnoreCase(summaryProducts.get(i).getProductName())) {
-							edtProductQty = Integer.parseInt(summaryProducts.get(i).getProductQty());
-							isEdit = true;
-							break;
-						} else {
-							edtProductQty = 0;
-							isEdit = false;
+					if(!isUpdateOrderSummary) {
+						boolean isEdit = false;
+						for(int i = 0;i<summaryProducts.size();i++) {
+							if(strProductName.equalsIgnoreCase(summaryProducts.get(i).getProductName())) {
+								edtProductQty = Integer.parseInt(summaryProducts.get(i).getProductQty());
+								isEdit = true;
+								break;
+							} else {
+								edtProductQty = 0;
+								isEdit = false;
+							}
 						}
+						Intent ProductQuantity = new Intent(context,OrderQuantityActivity.class);
+						ProductQuantity.putExtra("ProductName",strProductName);
+						ProductQuantity.putExtra("ProductPrice", strProductPrice);
+						if(isEdit)
+							ProductQuantity.putExtra("ProductEdtQty", edtProductQty);
+						else 
+							ProductQuantity.putExtra("ProductEdtQty", 0);
+						
+						startActivityForResult(ProductQuantity, PRODUCT_QUANTITY);
+					} else {
+						//for order summary update
+						boolean isEdit = false;
+						for(int i = 0;i<productMenu.size();i++) {
+							if(strProductName.equalsIgnoreCase(productMenu.get(i).getProductId())) {
+								edtProductQty = productMenu.get(i).getQuantity();
+								isEdit = true;
+								break;
+							} else {
+								edtProductQty = 0;
+								isEdit = false;
+							}
+						}
+						Intent ProductQuantity = new Intent(context,OrderQuantityActivity.class);
+						ProductQuantity.putExtra("ProductName",strProductName);
+						ProductQuantity.putExtra("ProductPrice", strProductPrice);
+						if(isEdit)
+							ProductQuantity.putExtra("ProductEdtQty", edtProductQty);
+						else 
+							ProductQuantity.putExtra("ProductEdtQty", 0);
+						
+						startActivityForResult(ProductQuantity, PRODUCT_QUANTITY);
 					}
-					Intent ProductQuantity = new Intent(context,OrderQuantityActivity.class);
-					ProductQuantity.putExtra("ProductName",strProductName);
-					ProductQuantity.putExtra("ProductPrice", strProductPrice);
-					if(isEdit)
-						ProductQuantity.putExtra("ProductEdtQty", edtProductQty);
-					else 
-						ProductQuantity.putExtra("ProductEdtQty", 0);
-					
-					startActivityForResult(ProductQuantity, PRODUCT_QUANTITY);
+					//end
 				}
 			});
 			lvwMenuOrder.setAdapter(adapter);
@@ -193,53 +264,106 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		ProductOrderSummary summaryProduct;
-		if(resultCode == Activity.RESULT_OK) {
-			boolean isContainsProduct = false;
-			int editedQtyProductPos = 0;
-			String productNameSelected = data.getStringExtra("ProductNameSelected");
-			int qty = data.getIntExtra("ProductQty", 0);
-			//double productPrice = data.getDoubleExtra("ProductPrice", 0.0);
-			
-			if(qty > 0) {
-				for(int i = 0;i<summaryProducts.size();i++) {
-					if(productNameSelected.equalsIgnoreCase(summaryProducts.get(i).getProductName())) {
-						isContainsProduct = true;
-						editedQtyProductPos = i;
-						break;
+		if(!isUpdateOrderSummary) {
+			if(resultCode == Activity.RESULT_OK) {
+				boolean isContainsProduct = false;
+				int editedQtyProductPos = 0;
+				String productNameSelected = data.getStringExtra("ProductNameSelected");
+				int qty = data.getIntExtra("ProductQty", 0);
+				//double productPrice = data.getDoubleExtra("ProductPrice", 0.0);
+				
+				if(qty > 0) {
+					for(int i = 0;i<summaryProducts.size();i++) {
+						if(productNameSelected.equalsIgnoreCase(summaryProducts.get(i).getProductName())) {
+							isContainsProduct = true;
+							editedQtyProductPos = i;
+							break;
+						}
 					}
-				}
-				if(!isContainsProduct) {
-					summaryProduct = new ProductOrderSummary();
-					summaryProduct.setProductName(productNameSelected);
-					summaryProduct.setProductQty(qty + "");
-					//summaryProduct.setProductTotalCost(productPrice + "");
-					summaryProducts.add(summaryProduct);
+					if(!isContainsProduct) {
+						summaryProduct = new ProductOrderSummary();
+						summaryProduct.setProductName(productNameSelected);
+						summaryProduct.setProductQty(qty + "");
+						//summaryProduct.setProductTotalCost(productPrice + "");
+						summaryProducts.add(summaryProduct);
+					} else {
+						summaryProduct = new ProductOrderSummary();
+						summaryProduct.setProductName(productNameSelected);
+						summaryProduct.setProductQty(qty + "");
+						//summaryProduct.setProductTotalCost(productPrice + "");
+						summaryProducts.set(editedQtyProductPos, summaryProduct);
+					}
 				} else {
-					summaryProduct = new ProductOrderSummary();
-					summaryProduct.setProductName(productNameSelected);
-					summaryProduct.setProductQty(qty + "");
-					//summaryProduct.setProductTotalCost(productPrice + "");
-					summaryProducts.set(editedQtyProductPos, summaryProduct);
-				}
-			} else {
-				boolean isRemoveProduct = false;
-				int removePos = 0;
-				for(int i = 0;i<summaryProducts.size();i++) {
-					if(productNameSelected.equalsIgnoreCase(summaryProducts.get(i).getProductName())) {
-						isRemoveProduct = true;
-						removePos = i;
-						break;
+					boolean isRemoveProduct = false;
+					int removePos = 0;
+					for(int i = 0;i<summaryProducts.size();i++) {
+						if(productNameSelected.equalsIgnoreCase(summaryProducts.get(i).getProductName())) {
+							isRemoveProduct = true;
+							removePos = i;
+							break;
+						}
+					}
+					if(isRemoveProduct) {
+						summaryProducts.remove(removePos);
 					}
 				}
-				if(isRemoveProduct) {
-					summaryProducts.remove(removePos);
+				if(summaryProducts.size() != 0) {
+					txtCartQty.setVisibility(View.VISIBLE);
+					txtCartQty.setText(summaryProducts.size() + "");
+				} else {
+					txtCartQty.setVisibility(View.INVISIBLE);
 				}
 			}
-			if(summaryProducts.size() != 0) {
-				txtCartQty.setVisibility(View.VISIBLE);
-				txtCartQty.setText(summaryProducts.size() + "");
-			} else {
-				txtCartQty.setVisibility(View.INVISIBLE);
+		} else {
+			//update order summary
+			if(resultCode == Activity.RESULT_OK) {
+				boolean isContainsProduct = false;
+				int editedQtyProductPos = 0;
+				String productNameSelected = data.getStringExtra("ProductNameSelected");
+				int qty = data.getIntExtra("ProductQty", 0);
+				//double productPrice = data.getDoubleExtra("ProductPrice", 0.0);
+				
+				if(qty > 0) {
+					for(int i = 0;i<productMenu.size();i++) {
+						if(productNameSelected.equalsIgnoreCase(productMenu.get(i).getProductId())) {
+							isContainsProduct = true;
+							editedQtyProductPos = i;
+							break;
+						}
+					}
+					if(!isContainsProduct) {
+						summaryProductUpdate = new ProductUpload();
+						summaryProductUpdate.setProductId(productNameSelected);
+						summaryProductUpdate.setQuantity(qty);
+						//summaryProduct.setProductTotalCost(productPrice + "");
+						productMenu.add(summaryProductUpdate);
+					} else {
+						summaryProductUpdate = new ProductUpload();
+						summaryProductUpdate.setProductId(productNameSelected);
+						summaryProductUpdate.setQuantity(qty);
+						//summaryProduct.setProductTotalCost(productPrice + "");
+						productMenu.set(editedQtyProductPos, summaryProductUpdate);
+					}
+				} else {
+					boolean isRemoveProduct = false;
+					int removePos = 0;
+					for(int i = 0;i<productMenu.size();i++) {
+						if(productNameSelected.equalsIgnoreCase(productMenu.get(i).getProductId())) {
+							isRemoveProduct = true;
+							removePos = i;
+							break;
+						}
+					}
+					if(isRemoveProduct) {
+						productMenu.remove(removePos);
+					}
+				}
+				if(productMenu.size() != 0) {
+					txtCartQty.setVisibility(View.VISIBLE);
+					txtCartQty.setText(productMenu.size() + "");
+				} else {
+					txtCartQty.setVisibility(View.INVISIBLE);
+				}
 			}
 		}
 	}
@@ -318,6 +442,9 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
 				OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
 				Bundle tableBundle = new Bundle();
 				tableBundle.putString("TableId", tableId);
+				
+				//doubtful
+				storage.setTableId(tableId);
 				orderSummaryFragment.setArguments(tableBundle);
 				
             	android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager();
@@ -327,6 +454,84 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
 			}
 		}
 		
+	}
+	
+	private class UpdateOrdersBackgroundTask extends AsyncTask<String, String, Integer> {
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Integer doInBackground(String... params) {
+			JSONObject obj = new JSONObject();
+			try {
+				
+				String strMenu = menuHashMap.toString().replace('=', ':');
+				String strExtraInfo = extraInfoHashMap.toString().replace('=', ':');
+				
+				JSONObject menuObject = new JSONObject(strMenu);
+				JSONObject extraInfoObject = new JSONObject(strExtraInfo);
+				
+				obj.put("createdAt", storage.getCreatedDateTime());
+				obj.put("updatedAt", updatedDateTime);
+				obj.put("orderList", menuObject);
+				obj.put("extraInfo", extraInfoObject);
+				
+				Integer responseCode = null;
+				String objString = obj.toString();
+				
+				URL url = new URL(params[0]);
+                HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+                urlConnection.setRequestMethod("PUT");
+                urlConnection.setRequestProperty("Content-Type","application/json");
+                try {
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setChunkedStreamingMode(0);
+
+                    OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+                    out.write(objString.getBytes());
+                    out.flush();
+                    out.close();
+
+                    InputStream is = new BufferedInputStream(urlConnection.getInputStream());
+                    BufferedReader in = new BufferedReader(new InputStreamReader(is));
+                    //while ((inputLine = in.readLine()) != null)
+                        //System.out.println(inputLine);
+                    String strResponseAfterOrder = in.readLine();
+                    is.close();
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    responseCode = urlConnection.getResponseCode();
+                    String responseString = urlConnection.getResponseMessage();
+                    
+                    urlConnection.disconnect();
+                }
+                return responseCode;
+            } catch(Exception e) {
+
+            }
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			OrderSummaryFragment orderSummaryFragment = new OrderSummaryFragment();
+			Bundle tableBundle = new Bundle();
+			tableBundle.putString("TableId", storage.getTableId());
+			orderSummaryFragment.setArguments(tableBundle);
+			
+        	android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager();
+        	android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
+        	transaction.replace(R.id.homeDrawerFrame, orderSummaryFragment);
+        	transaction.commit();
+		}
 	}
 
 	@Override

@@ -117,14 +117,16 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
 	}
 	
 	private void navigateToMenuOrderUpdate() {
-		MenuOrderFragmentUpdateOrder menuOrderFragmentUpdateOrder = new MenuOrderFragmentUpdateOrder();
+		MenuOrderFragment menuOrderFragment = new MenuOrderFragment();
 		Bundle tableBundle = new Bundle();
+		storage.setUpdateOrderSummary(true);
+		storage.setProductMenu(productMenu);
 		//tableBundle.putString("TableId", tableId);
-		menuOrderFragmentUpdateOrder.setArguments(tableBundle);
+		menuOrderFragment.setArguments(tableBundle);
 		
     	android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager();
     	android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
-    	transaction.replace(R.id.homeDrawerFrame, menuOrderFragmentUpdateOrder);
+    	transaction.replace(R.id.homeDrawerFrame, menuOrderFragment);
     	transaction.commit();
 	}
 	
@@ -153,6 +155,7 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
             	tableNumber = tableOrder.getExtraInfo().getTableNumber();
             	isBillPrinted = tableOrder.getExtraInfo().getIsBillPrinted();
             	createdDateandTime = tableOrder.getCreatedAt();
+            	storage.setCreatedDateTime(createdDateandTime);
             	
             	for(String key:menuHashMap.keySet()) {
             		summaryProduct = new ProductUpload();
@@ -166,7 +169,6 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
 					public void editOrderItem(int position) {
 						// TODO Auto-generated method stub
 						Intent ProductQuantity = new Intent(context,OrderQuantityActivity.class);
-						String temp = productMenu.get(position).getPrice() + "";
 						ProductQuantity.putExtra("ProductName",productMenu.get(position).getProductId());
 						ProductQuantity.putExtra("ProductPrice", productMenu.get(position).getPrice() + "");
 						ProductQuantity.putExtra("ProductEdtQty", productMenu.get(position).getQuantity());
