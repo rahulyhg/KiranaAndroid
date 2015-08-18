@@ -1,11 +1,14 @@
 package com.kiranaofficial.kirana;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +31,7 @@ public class LoginFragment extends Fragment {
     TokenIdStorage storage;
     Context context;
     ProgressDialog progress;
+    List<ProductUpload> localProducts;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
@@ -143,12 +147,14 @@ public class LoginFragment extends Fragment {
         @Override
         protected void onPostExecute(List<ProductUpload> products) {
         	progress.dismiss();
-        	storage.setProducts(products);
+        	localProducts = products;
+        	//storage.setProducts(products);
             if(products != null) {
             	if(products.size() != 0) {
 	            	int code = products.get(0).getMajorCode();
 	            	if(code == 200) {
-	            		
+	            		DownloadImages downloadImages = new DownloadImages();
+	            		downloadImages.execute(products.get(0).getProductImageUrl());
 	            	} else if(code == 401) {
 	                	String serviceMsg = "Unauthorized user";
 	                	Common.ShowWebServiceResponse(context, serviceMsg);
@@ -165,5 +171,41 @@ public class LoginFragment extends Fragment {
             	Common.ShowWebServiceResponse(context, serviceMsg);
             }
         }
+    }
+    
+    private class DownloadImages extends AsyncTask<String,String,String> {
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			String url = params[0];
+    		Bitmap bitmap = null;
+			try {
+				// Download Image from URL
+				InputStream input = new java.net.URL(url).openStream();
+				// Decode Bitmap
+				bitmap = BitmapFactory.decodeStream(input);
+				localProducts.get(0).setProductImage(bitmap);
+				//storage.setProducts(localProducts);
+			} catch (Exception e) {
+				bitmap = null;
+				localProducts.get(0).setProductImage(bitmap);
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+		}
+    	
     }
 }

@@ -57,9 +57,10 @@ public class CSVProductListFragment extends Fragment{
 	//Delimiter used in CSV file
 	private static final String COMMA_DELIMITER = ",";
 	private static final String NEW_LINE_SEPARATOR = "\n";
+	private static final String COLON_SEPERATOR = ":";
 	
 	//CSV file header
-	private static final String FILE_HEADER = "product_id,quantity,price,discount,tax_bracket,image_path";
+	private static final String FILE_HEADER = "product_id,quantity,price,discount,tax_bracket,product_property";
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -136,7 +137,13 @@ public class CSVProductListFragment extends Fragment{
         				fileWriter.append(COMMA_DELIMITER);
         				fileWriter.append(String.valueOf(product.getProductTax()));
         				fileWriter.append(COMMA_DELIMITER);
+        				//VEG OR NON VEG
         				fileWriter.append(String.valueOf(product.getProductImagePath()));
+        				fileWriter.append(COLON_SEPERATOR);
+        				//INDIAN etc
+        				fileWriter.append(String.valueOf(product.getProductExtra1()));
+        				fileWriter.append(NEW_LINE_SEPARATOR);
+        				/*fileWriter.append(String.valueOf(product.getProductImagePath()));
         				fileWriter.append(COMMA_DELIMITER);
         				fileWriter.append(String.valueOf(product.getProductExtra1()));
         				fileWriter.append(COMMA_DELIMITER);
@@ -145,7 +152,7 @@ public class CSVProductListFragment extends Fragment{
         				fileWriter.append(String.valueOf(product.getProductExtra2()));
         				fileWriter.append(COMMA_DELIMITER);
         				fileWriter.append(String.valueOf(product.getProductExtra2()));
-        				fileWriter.append(NEW_LINE_SEPARATOR);
+        				fileWriter.append(NEW_LINE_SEPARATOR);*/
         			}
         			//success
         			Toast.makeText(getActivity(), "CSV file created in storage!", Toast.LENGTH_LONG).show();

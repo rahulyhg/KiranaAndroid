@@ -202,7 +202,8 @@ public class HomeActivity extends FragmentActivity implements ActionBar.OnNaviga
             	TableNumberFragment menuFragment = new TableNumberFragment();
             	android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
             	android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
-            	transaction.add(R.id.homeDrawerFrame, menuFragment);//shoplistfragment
+            	transaction.replace(R.id.homeDrawerFrame, menuFragment);//shoplistfragment
+            	transaction.addToBackStack(null);
             	transaction.commit();
                 break;
             case 1:

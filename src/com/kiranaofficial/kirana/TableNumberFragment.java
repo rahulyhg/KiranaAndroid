@@ -42,6 +42,7 @@ public class TableNumberFragment extends Fragment{
 	            	android.support.v4.app.FragmentManager manager = fragmentManager;
 	            	android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
 	            	transaction.replace(R.id.homeDrawerFrame, menuFragment);
+	            	transaction.addToBackStack(null);
 	            	transaction.commit();
 	            }
             }

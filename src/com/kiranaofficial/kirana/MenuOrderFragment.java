@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -58,6 +59,7 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
 	String strResponseAfterOrder = null;
 	TableOrder tableOrder = null;
 	boolean isUpdateOrderSummary;
+	ImageButton ibtCart;
 	
 	//update summary order fields
 	
@@ -74,6 +76,7 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
         btnMenuOrder = (Button)rootView.findViewById(R.id.btnMenuOrder);
         searchProducts = (EditText)rootView.findViewById(R.id.searchProducts);
         txtCartQty = (TextView)rootView.findViewById(R.id.txtCartQty);
+        ibtCart = (ImageButton)rootView.findViewById(R.id.ibtCart);
         
         summaryProducts = new ArrayList<ProductOrderSummary>();
         
@@ -125,12 +128,22 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
 			}
 		});
         
+        ibtCart.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				saveOrders();
+			}
+		});
+        
         btnMenuOrder.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(!isUpdateOrderSummary) { 
+				saveOrders();
+				/*if(!isUpdateOrderSummary) { 
 					if(summaryProducts != null && summaryProducts.size() > 0) {
 						menuHashMap = new HashMap<String, Integer>();
 						extraInfoHashMap = new HashMap<String, String>();
@@ -154,6 +167,8 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
 				        } else {
 				        	Common.ShowNoNetworkToast(context);
 				        }
+					} else {
+						
 					}
 				} else {
 					//for update summary
@@ -180,12 +195,73 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
 				        } else {
 				        	Common.ShowNoNetworkToast(context);
 				        }
+					} else {
+						
 					}
-				}
+				}*/
 			}
 		});
         
         return rootView;
+	}
+	
+	private void saveOrders() {
+		if(!isUpdateOrderSummary) { 
+			if(summaryProducts != null && summaryProducts.size() > 0) {
+				menuHashMap = new HashMap<String, Integer>();
+				extraInfoHashMap = new HashMap<String, String>();
+				for(int i = 0;i<summaryProducts.size();i++) {
+					String pdtName = summaryProducts.get(i).productName;
+					int quantity = Integer.parseInt(summaryProducts.get(i).productQty);
+					//double totalCost = Double.parseDouble(summaryProducts.get(i).getProductTotalCost());
+					menuHashMap.put(pdtName, quantity);
+				}
+				SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+				currentDateandTime = dateFormatter.format(new Date());
+				
+				extraInfoHashMap.put("TableNumber", tableNumber);
+				extraInfoHashMap.put("LocationCoordinates", latitude + "_" + longitude);
+				extraInfoHashMap.put("IsBillPrinted", "NO");
+				
+				String uploadMenuUrl = "http://54.169.108.240:8080/KiranaService/v1/order/create?userToken=" + userToken;
+				UploadOrdersBackgroundTask task = new UploadOrdersBackgroundTask();
+		        if(Common.IsOnline(context)) {
+		        	task.execute(uploadMenuUrl);
+		        } else {
+		        	Common.ShowNoNetworkToast(context);
+		        }
+			} else {
+				
+			}
+		} else {
+			//for update summary
+			if(productMenu != null && productMenu.size() > 0) {
+				menuHashMap = new HashMap<String, Integer>();
+				extraInfoHashMap = new HashMap<String, String>();
+				for(int i = 0;i<productMenu.size();i++) {
+					String pdtName = productMenu.get(i).getProductId();
+					int quantity = productMenu.get(i).getQuantity();
+					//double totalCost = Double.parseDouble(summaryProducts.get(i).getProductTotalCost());
+					menuHashMap.put(pdtName, quantity);
+				}
+				SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+				updatedDateTime = dateFormatter.format(new Date());
+				
+				extraInfoHashMap.put("TableNumber", storage.getTableNumber());
+				extraInfoHashMap.put("LocationCoordinates", latitude + "_" + longitude);
+				extraInfoHashMap.put("IsBillPrinted", "NO");
+				
+				String uploadMenuUrl = "http://54.169.108.240:8080/KiranaService/v1/order/update?userToken=" + userToken + "&orderId=" + storage.getTableId();
+				UpdateOrdersBackgroundTask task = new UpdateOrdersBackgroundTask();
+		        if(Common.IsOnline(context)) {
+		        	task.execute(uploadMenuUrl);
+		        } else {
+		        	Common.ShowNoNetworkToast(context);
+		        }
+			} else {
+				
+			}
+		}
 	}
 	
 	/* Request updates at startup */
@@ -530,6 +606,7 @@ public class MenuOrderFragment extends android.support.v4.app.Fragment implement
         	android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager();
         	android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
         	transaction.replace(R.id.homeDrawerFrame, orderSummaryFragment);
+        	transaction.addToBackStack(null);
         	transaction.commit();
 		}
 	}

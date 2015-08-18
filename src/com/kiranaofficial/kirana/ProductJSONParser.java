@@ -38,6 +38,7 @@ public class ProductJSONParser {
 		    	product.setTaxBracket(parentArray.getJSONObject(i).getDouble("taxBracket"));
 		    	product.setCreatedAt(parentArray.getJSONObject(i).getString("created_at"));
 		    	product.setUpdatedAt(parentArray.getJSONObject(i).getString("updated_at"));
+		    	product.setProductImageUrl(parentArray.getJSONObject(i).getString("productCodeImageUrl"));
 		    	
 		    	products.add(product);
 		    	product = new ProductUpload();

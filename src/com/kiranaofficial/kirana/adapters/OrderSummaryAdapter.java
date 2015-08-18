@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.kiranaofficial.kirana.BillCalculation;
 import com.kiranaofficial.kirana.HttpManagerDelete;
 import com.kiranaofficial.kirana.IDeleteShop;
 import com.kiranaofficial.kirana.IOrderSummary;
@@ -60,7 +61,9 @@ public class OrderSummaryAdapter extends BaseAdapter {
 
         TextView txtProductName = (TextView) convertView.findViewById(R.id.txtProductName);
         TextView txtProductQuantity = (TextView) convertView.findViewById(R.id.txtProductQuantity);
-        TextView txtTotalProductCost = (TextView) convertView.findViewById(R.id.txtTotalProductCost);
+        TextView txtProductSubTotal = (TextView) convertView.findViewById(R.id.txtTotalProductCost);
+        TextView txtTaxBracket = (TextView) convertView.findViewById(R.id.txtTaxBracket);
+        TextView txtProductPrice = (TextView) convertView.findViewById(R.id.txtProductPrice);
 
         ImageButton ibtPopupOrderSummary = (ImageButton) convertView.findViewById(R.id.ibtPopupOrderSummary);
         ibtPopupOrderSummary.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +95,12 @@ public class OrderSummaryAdapter extends BaseAdapter {
         });
         txtProductName.setText(summaryProduct.get(position).getProductId());
         txtProductQuantity.setText(summaryProduct.get(position).getQuantity() + "");
+        txtTaxBracket.setText(summaryProduct.get(position).getTaxBracket() + "%");
+        txtProductPrice.setText("Rs." + summaryProduct.get(position).getPrice());
+        
+        double subTotal = summaryProduct.get(position).getProductSubTotal();
+        
+        txtProductSubTotal.setText("Rs." + subTotal);
         return convertView;
     }
     

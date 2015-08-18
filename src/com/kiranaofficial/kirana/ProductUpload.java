@@ -1,5 +1,7 @@
 package com.kiranaofficial.kirana;
 
+import android.graphics.Bitmap;
+
 public class ProductUpload {
 	private int majorCode;
 	private int id;
@@ -8,8 +10,11 @@ public class ProductUpload {
     private double price;
     private double discount;
     private double taxBracket;
+    private double productSubTotal;
     private String created_at;
     private String updated_at;
+    private String productImageUrl;
+    private Bitmap productImage;
     
 	public int getMajorCode() {
 		return majorCode;
@@ -64,6 +69,24 @@ public class ProductUpload {
 	}
 	public void setUpdatedAt(String updated_at) {
 		this.updated_at = updated_at;
+	}
+	public double getProductSubTotal() {
+		return productSubTotal;
+	}
+	public void setProductSubTotal(double productSubTotal) {
+		this.productSubTotal = productSubTotal;
+	}
+	public String getProductImageUrl() {
+		return productImageUrl;
+	}
+	public void setProductImageUrl(String productImageUrl) {
+		this.productImageUrl = productImageUrl;
+	}
+	public Bitmap getProductImage() {
+		return productImage;
+	}
+	public void setProductImage(Bitmap productImage) {
+		this.productImage = productImage;
 	}
     
 }

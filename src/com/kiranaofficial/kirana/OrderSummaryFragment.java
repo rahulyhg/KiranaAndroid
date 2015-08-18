@@ -51,6 +51,9 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
 	ProductUpload summaryProduct;
 	int PRODUCT_QUANTITY = 31;
 	double latitude = 0f, longitude = 0f;
+	List<ProductUpload> products;
+	BillCalculation billCalculation;
+	double grandTotal = 0.0, totalCostProducts = 0.0;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -62,11 +65,26 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
 		btnAddMore = (Button)rootView.findViewById(R.id.btnAddMore);
 		btnSave = (Button)rootView.findViewById(R.id.btnSave);
 		btnAddMore = (Button)rootView.findViewById(R.id.btnAddMore);
+		btnPrintBill = (Button)rootView.findViewById(R.id.btnPrintBill);
 		
 		context = getActivity();
 		storage = (TokenIdStorage) getActivity().getApplicationContext();
         userToken = storage.getUserToken();
-        final String tableId = getArguments().getString("TableId");
+        
+        //get products for whole product list, get product menu for menu which updates
+  		products = new ArrayList<ProductUpload>();
+  		products = storage.getProducts();
+  		
+  		//end
+  		
+  		//bill calculation
+  		
+  		billCalculation = new BillCalculation();
+  		
+  		//end
+      		
+        //final String tableId = getArguments().getString("TableId");//commented use app level VALUE
+        final String tableId = storage.getTableId();
 		
 		BackgroundTask task = new BackgroundTask();
 		final String summaryUrl = "http://54.169.108.240:8080/KiranaService/v1/order/" + tableId + "?userToken=" + userToken;
@@ -77,13 +95,13 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(productMenu != null && productMenu.size() > 0) {
+				if(productMenu != null && productMenu.size() >= 0) {
 					menuHashMap = new HashMap<String, Integer>();
 					extraInfoHashMap = new HashMap<String, String>();
 					for(int i = 0;i<productMenu.size();i++) {
 						String pdtName = productMenu.get(i).getProductId();
 						int quantity = productMenu.get(i).getQuantity();
-						//double totalCost = Double.parseDouble(summaryProducts.get(i).getProductTotalCost());
+						//double rate = productMenu.get(i).getPrice();
 						menuHashMap.put(pdtName, quantity);
 					}
 					SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -113,6 +131,19 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
 			}
 		});
 		
+		btnPrintBill.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				MyOrdersFragment myOrdersFragment = new MyOrdersFragment();
+				android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager();
+		    	android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
+		    	transaction.replace(R.id.homeDrawerFrame, myOrdersFragment);
+		    	transaction.commit();
+			}
+		});
+		
 		return rootView;
 	}
 	
@@ -120,6 +151,7 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
 		MenuOrderFragment menuOrderFragment = new MenuOrderFragment();
 		Bundle tableBundle = new Bundle();
 		storage.setUpdateOrderSummary(true);
+		//dangerous
 		storage.setProductMenu(productMenu);
 		//tableBundle.putString("TableId", tableId);
 		menuOrderFragment.setArguments(tableBundle);
@@ -127,6 +159,7 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
     	android.support.v4.app.FragmentManager manager = getActivity().getSupportFragmentManager();
     	android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
     	transaction.replace(R.id.homeDrawerFrame, menuOrderFragment);
+    	transaction.addToBackStack(null);
     	transaction.commit();
 	}
 	
@@ -161,7 +194,20 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
             		summaryProduct = new ProductUpload();
             		summaryProduct.setProductId(key);
             		summaryProduct.setQuantity(menuHashMap.get(key));
+            		//added for getting price
+            		for(int i = 0;i < products.size();i++) {
+            			if(key.equalsIgnoreCase(products.get(i).getProductId())){
+            				summaryProduct.setPrice(products.get(i).getPrice());
+            				summaryProduct.setTaxBracket(products.get(i).getTaxBracket());
+            				double subTotal = billCalculation.getProductSubTotal(products.get(i).getPrice(), menuHashMap.get(key), products.get(i).getTaxBracket());
+            				summaryProduct.setProductSubTotal(subTotal);
+            				totalCostProducts += subTotal; 
+            				break;
+            			}
+            		}
+            		//end
             		productMenu.add(summaryProduct);
+            		
             	}
             	orderSummaryAdapter = new OrderSummaryAdapter(getActivity(), productMenu, new IOrderSummary(){
 
@@ -169,7 +215,7 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
 					public void editOrderItem(int position) {
 						// TODO Auto-generated method stub
 						Intent ProductQuantity = new Intent(context,OrderQuantityActivity.class);
-						ProductQuantity.putExtra("ProductName",productMenu.get(position).getProductId());
+						ProductQuantity.putExtra("ProductName", productMenu.get(position).getProductId());
 						ProductQuantity.putExtra("ProductPrice", productMenu.get(position).getPrice() + "");
 						ProductQuantity.putExtra("ProductEdtQty", productMenu.get(position).getQuantity());
 						
@@ -204,11 +250,18 @@ public class OrderSummaryFragment extends Fragment implements LocationListener{
 					selectedProduct.setProductId(productMenu.get(i).getProductId());
 					selectedProduct.setQuantity(qty);
 					selectedProduct.setPrice(productMenu.get(i).getPrice());
+					selectedProduct.setTaxBracket(productMenu.get(i).getTaxBracket());
+					double subTotal = billCalculation.getProductSubTotal(productMenu.get(i).getPrice(), qty, productMenu.get(i).getTaxBracket());
+					selectedProduct.setProductSubTotal(subTotal);
 					
 					productMenu.set(i, selectedProduct);
 					orderSummaryAdapter.notifyDataSetChanged();
 					break;
 				}
+			}
+			totalCostProducts = 0.0;
+			for(int i = 0;i<productMenu.size();i++) {
+				totalCostProducts += productMenu.get(i).getProductSubTotal();
 			}
 		}
 	}
